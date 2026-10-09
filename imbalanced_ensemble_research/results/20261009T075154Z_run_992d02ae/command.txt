@@ -1,0 +1,1 @@
+'C:\git\imbalanced_ensemble_research\src\imbalance_research\cli.py' run --config configs/smoke.json

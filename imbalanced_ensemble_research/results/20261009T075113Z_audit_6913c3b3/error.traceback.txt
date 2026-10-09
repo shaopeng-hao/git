@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\git\imbalanced_ensemble_research\src\imbalance_research\cli.py", line 104, in main
+    report=audit_inputs(cfg); art.write_json("audit.json",report); art.write_text("audit.md",markdown_audit(report)); art.status("success","audit",input_fingerprint={"data_dir":fingerprint(cfg['inputs']['data_dir']),"reference_pdf":fingerprint(cfg['inputs']['reference_pdf'])}); print(art.path); return 0
+                                                                                                                                                                                 ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\git\imbalanced_ensemble_research\src\imbalance_research\core.py", line 84, in fingerprint
+    with p.open("rb") as f:
+         ~~~~~~^^^^^^
+  File "C:\Users\k64183565\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\k64183565\\Desktop\\w\\数据'

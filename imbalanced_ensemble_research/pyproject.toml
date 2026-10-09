@@ -1,0 +1,8 @@
+[project]
+name = "imbalanced-ensemble-research"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "离线、可审计的不平衡数据集多目标集成学习研究准备"
+
+[tool.unittest]
+start-directory = "tests"

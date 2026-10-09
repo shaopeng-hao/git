@@ -1,0 +1,5 @@
+dataset,seed,model,status,confusion_matrix,FPR,FNR,precision,recall,F1,G_mean,ROC_AUC,PR_AUC,not_computable_reason
+"ecoli_0_1_4_6_vs_5_smoke",20261009,"rbf_svm","success",[[26, 0], [1, 1]],0.0,0.5,1.0,0.5,0.6666666666666666,0.7071067811865476,0.8846153846153846,0.625,[]
+"ecoli_0_1_4_6_vs_5_smoke",20261009,"weighted_rbf_svm","success",[[26, 0], [1, 1]],0.0,0.5,1.0,0.5,0.6666666666666666,0.7071067811865476,0.9615384615384616,0.75,[]
+"ecoli_0_1_4_6_vs_5_smoke",20261009,"random_forest","success",[[26, 0], [1, 1]],0.0,0.5,1.0,0.5,0.6666666666666666,0.7071067811865476,0.9711538461538463,0.75,[]
+"ecoli_0_1_4_6_vs_5_smoke",20261009,"rusboost","not_run_dependency_missing","","","","","","","","","",""

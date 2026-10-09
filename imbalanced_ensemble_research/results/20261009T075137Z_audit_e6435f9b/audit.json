@@ -1,0 +1,2739 @@
+{
+  "input_boundary": [
+    "C:\\Users\\k64183565\\Desktop\\w\\数据",
+    "C:\\Users\\k64183565\\Desktop\\w\\xin\\郭论文.pdf"
+  ],
+  "data_dir_exists": true,
+  "data_files": [
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\abalone19.dat",
+      "file": "abalone19.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\abalone19.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 252804,
+        "mtime_ns": 1263726378000000000,
+        "sha256": "6aa5b1ffd05eb4c8c74bb07e6bab248cdb4fc327f5f62bb77339097e92bc76fa"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 4174,
+      "columns": [
+        "Sex",
+        "Length",
+        "Diameter",
+        "Height",
+        "Whole_weight",
+        "Shucked_weight",
+        "Viscera_weight",
+        "Shell_weight",
+        "Class"
+      ],
+      "dimensions": [
+        4174,
+        9
+      ],
+      "raw_feature_count": 8,
+      "candidate_label_columns": [
+        {
+          "column": "Sex",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Length",
+          "unique": 134,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Diameter",
+          "unique": 111,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Height",
+          "unique": 51,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 4142,
+        "positive": 32
+      },
+      "last_column_ratios": {
+        "negative": 0.9923334930522281,
+        "positive": 0.007666506947771922
+      },
+      "column_types": {
+        "Sex": "non_numeric",
+        "Length": "numeric",
+        "Diameter": "numeric",
+        "Height": "numeric",
+        "Whole_weight": "numeric",
+        "Shucked_weight": "numeric",
+        "Viscera_weight": "numeric",
+        "Shell_weight": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Sex": 0,
+        "Length": 0,
+        "Diameter": 0,
+        "Height": 0,
+        "Whole_weight": 0,
+        "Shucked_weight": 0,
+        "Viscera_weight": 0,
+        "Shell_weight": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Sex",
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 0,
+      "duplicate_feature_rows": 0,
+      "attributes": [
+        {
+          "name": "Sex",
+          "declaration": "{M, F, I}"
+        },
+        {
+          "name": "Length",
+          "declaration": "real [0.075, 0.815]"
+        },
+        {
+          "name": "Diameter",
+          "declaration": "real [0.055, 0.65]"
+        },
+        {
+          "name": "Height",
+          "declaration": "real [0.0, 1.13]"
+        },
+        {
+          "name": "Whole_weight",
+          "declaration": "real [0.0020, 2.8255]"
+        },
+        {
+          "name": "Shucked_weight",
+          "declaration": "real [0.0010, 1.488]"
+        },
+        {
+          "name": "Viscera_weight",
+          "declaration": "real [5.0E-4, 0.76]"
+        },
+        {
+          "name": "Shell_weight",
+          "declaration": "real [0.0015, 1.005]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-1-3-7_vs_2-6.dat",
+      "file": "ecoli-0-1-3-7_vs_2-6.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-1-3-7_vs_2-6.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 12273,
+        "mtime_ns": 1263722160000000000,
+        "sha256": "9e866757048d2fb175c16bb809eb9ca02901b0ec395950acaa47c94c01cc5e95"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 281,
+      "columns": [
+        "Mcg",
+        "Gvh",
+        "Lip",
+        "Chg",
+        "Aac",
+        "Alm1",
+        "Alm2",
+        "Class"
+      ],
+      "dimensions": [
+        281,
+        8
+      ],
+      "raw_feature_count": 7,
+      "candidate_label_columns": [
+        {
+          "column": "Lip",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Chg",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 274,
+        "positive": 7
+      },
+      "last_column_ratios": {
+        "negative": 0.9750889679715302,
+        "positive": 0.02491103202846975
+      },
+      "column_types": {
+        "Mcg": "numeric",
+        "Gvh": "numeric",
+        "Lip": "numeric",
+        "Chg": "numeric",
+        "Aac": "numeric",
+        "Alm1": "numeric",
+        "Alm2": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Mcg": 0,
+        "Gvh": 0,
+        "Lip": 0,
+        "Chg": 0,
+        "Aac": 0,
+        "Alm1": 0,
+        "Alm2": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 0,
+      "duplicate_feature_rows": 0,
+      "attributes": [
+        {
+          "name": "Mcg",
+          "declaration": "real[0.0,89.0]"
+        },
+        {
+          "name": "Gvh",
+          "declaration": "real[1.0,88.0]"
+        },
+        {
+          "name": "Lip",
+          "declaration": "real[1.0,48.0]"
+        },
+        {
+          "name": "Chg",
+          "declaration": "real[1.0,5.0]"
+        },
+        {
+          "name": "Aac",
+          "declaration": "real[0.0,88.0]"
+        },
+        {
+          "name": "Alm1",
+          "declaration": "real[1.0,94.0]"
+        },
+        {
+          "name": "Alm2",
+          "declaration": "real[0.0,99.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive,negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-1-4-6_vs_5.dat",
+      "file": "ecoli-0-1-4-6_vs_5.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-1-4-6_vs_5.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 11072,
+        "mtime_ns": 1278985918000000000,
+        "sha256": "582b7179b76565a3406945e746c6e8d68ed4e54a36804e672cf1f26063dcd642"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 280,
+      "columns": [
+        "a1",
+        "a2",
+        "a3",
+        "a5",
+        "a6",
+        "a7",
+        "class"
+      ],
+      "dimensions": [
+        280,
+        7
+      ],
+      "raw_feature_count": 6,
+      "candidate_label_columns": [
+        {
+          "column": "a3",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "class",
+      "last_column_counts": {
+        "negative": 260,
+        "positive": 20
+      },
+      "last_column_ratios": {
+        "negative": 0.9285714285714286,
+        "positive": 0.07142857142857142
+      },
+      "column_types": {
+        "a1": "numeric",
+        "a2": "numeric",
+        "a3": "numeric",
+        "a5": "numeric",
+        "a6": "numeric",
+        "a7": "numeric",
+        "class": "non_numeric"
+      },
+      "missing_by_column": {
+        "a1": 0,
+        "a2": 0,
+        "a3": 0,
+        "a5": 0,
+        "a6": 0,
+        "a7": 0,
+        "class": 0
+      },
+      "non_numeric_columns": [
+        "class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 0,
+      "duplicate_feature_rows": 0,
+      "attributes": [
+        {
+          "name": "a1",
+          "declaration": "real [0.0, 89.0]"
+        },
+        {
+          "name": "a2",
+          "declaration": "real [3.0, 88.0]"
+        },
+        {
+          "name": "a3",
+          "declaration": "real [1.0, 48.0]"
+        },
+        {
+          "name": "a5",
+          "declaration": "real [0.0, 88.0]"
+        },
+        {
+          "name": "a6",
+          "declaration": "real [1.0, 94.0]"
+        },
+        {
+          "name": "a7",
+          "declaration": "real [0.0, 99.0]"
+        },
+        {
+          "name": "class",
+          "declaration": "{positive,negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-6-7_vs_5.dat",
+      "file": "ecoli-0-6-7_vs_5.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\ecoli-0-6-7_vs_5.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 8763,
+        "mtime_ns": 1278985920000000000,
+        "sha256": "4e72c98aca803f01f89fbf1a75923e23950f2f47a580db23d0fc91c6bb45ce08"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 220,
+      "columns": [
+        "a1",
+        "a2",
+        "a3",
+        "a5",
+        "a6",
+        "a7",
+        "class"
+      ],
+      "dimensions": [
+        220,
+        7
+      ],
+      "raw_feature_count": 6,
+      "candidate_label_columns": [
+        {
+          "column": "a3",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "class",
+      "last_column_counts": {
+        "negative": 200,
+        "positive": 20
+      },
+      "last_column_ratios": {
+        "negative": 0.9090909090909091,
+        "positive": 0.09090909090909091
+      },
+      "column_types": {
+        "a1": "numeric",
+        "a2": "numeric",
+        "a3": "numeric",
+        "a5": "numeric",
+        "a6": "numeric",
+        "a7": "numeric",
+        "class": "non_numeric"
+      },
+      "missing_by_column": {
+        "a1": 0,
+        "a2": 0,
+        "a3": 0,
+        "a5": 0,
+        "a6": 0,
+        "a7": 0,
+        "class": 0
+      },
+      "non_numeric_columns": [
+        "class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 0,
+      "duplicate_feature_rows": 0,
+      "attributes": [
+        {
+          "name": "a1",
+          "declaration": "real [0.0, 78.0]"
+        },
+        {
+          "name": "a2",
+          "declaration": "real [1.0, 88.0]"
+        },
+        {
+          "name": "a3",
+          "declaration": "real [1.0, 48.0]"
+        },
+        {
+          "name": "a5",
+          "declaration": "real [3.0, 88.0]"
+        },
+        {
+          "name": "a6",
+          "declaration": "real [2.0, 84.0]"
+        },
+        {
+          "name": "a7",
+          "declaration": "real [0.0, 85.0]"
+        },
+        {
+          "name": "class",
+          "declaration": "{positive,negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\glass-0-1-2-3_vs_4-5-6.dat",
+      "file": "glass-0-1-2-3_vs_4-5-6.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\glass-0-1-2-3_vs_4-5-6.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 18708,
+        "mtime_ns": 1263731392000000000,
+        "sha256": "67552176e09a3c980ad1c6a2140aba5375b94a6180095fa0632ea168c58bd955"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 214,
+      "columns": [
+        "RI",
+        "Na",
+        "Mg",
+        "Al",
+        "Si",
+        "K",
+        "Ca",
+        "Ba",
+        "Fe",
+        "Class"
+      ],
+      "dimensions": [
+        214,
+        10
+      ],
+      "raw_feature_count": 9,
+      "candidate_label_columns": [
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 163,
+        "positive": 51
+      },
+      "last_column_ratios": {
+        "negative": 0.7616822429906542,
+        "positive": 0.2383177570093458
+      },
+      "column_types": {
+        "RI": "numeric",
+        "Na": "numeric",
+        "Mg": "numeric",
+        "Al": "numeric",
+        "Si": "numeric",
+        "K": "numeric",
+        "Ca": "numeric",
+        "Ba": "numeric",
+        "Fe": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "RI": 0,
+        "Na": 0,
+        "Mg": 0,
+        "Al": 0,
+        "Si": 0,
+        "K": 0,
+        "Ca": 0,
+        "Ba": 0,
+        "Fe": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 1,
+      "duplicate_feature_rows": 1,
+      "attributes": [
+        {
+          "name": "RI",
+          "declaration": "real [1.51115, 1.53393]"
+        },
+        {
+          "name": "Na",
+          "declaration": "real [10.73, 17.38]"
+        },
+        {
+          "name": "Mg",
+          "declaration": "real [0.0, 4.49]"
+        },
+        {
+          "name": "Al",
+          "declaration": "real [0.29, 3.5]"
+        },
+        {
+          "name": "Si",
+          "declaration": "real [69.81, 75.41]"
+        },
+        {
+          "name": "K",
+          "declaration": "real [0.0, 6.21]"
+        },
+        {
+          "name": "Ca",
+          "declaration": "real [5.43, 16.19]"
+        },
+        {
+          "name": "Ba",
+          "declaration": "real [0.0, 3.15]"
+        },
+        {
+          "name": "Fe",
+          "declaration": "real [0.0, 0.51]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\glass-0-1-5_vs_2.dat",
+      "file": "glass-0-1-5_vs_2.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\glass-0-1-5_vs_2.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 13463,
+        "mtime_ns": 1278985920000000000,
+        "sha256": "fc9774f5775ab94def4919130ff0bccdd7487bf301c9750393f5644e8ffe398e"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 172,
+      "columns": [
+        "RI",
+        "Na",
+        "Mg",
+        "Al",
+        "Si",
+        "K",
+        "Ca",
+        "Ba",
+        "Fe",
+        "typeGlass"
+      ],
+      "dimensions": [
+        172,
+        10
+      ],
+      "raw_feature_count": 9,
+      "candidate_label_columns": [
+        {
+          "column": "Ba",
+          "unique": 9,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "typeGlass",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "typeGlass",
+      "last_column_counts": {
+        "negative": 155,
+        "positive": 17
+      },
+      "last_column_ratios": {
+        "negative": 0.9011627906976745,
+        "positive": 0.09883720930232558
+      },
+      "column_types": {
+        "RI": "numeric",
+        "Na": "numeric",
+        "Mg": "numeric",
+        "Al": "numeric",
+        "Si": "numeric",
+        "K": "numeric",
+        "Ca": "numeric",
+        "Ba": "numeric",
+        "Fe": "numeric",
+        "typeGlass": "non_numeric"
+      },
+      "missing_by_column": {
+        "RI": 0,
+        "Na": 0,
+        "Mg": 0,
+        "Al": 0,
+        "Si": 0,
+        "K": 0,
+        "Ca": 0,
+        "Ba": 0,
+        "Fe": 0,
+        "typeGlass": 0
+      },
+      "non_numeric_columns": [
+        "typeGlass"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 1,
+      "duplicate_feature_rows": 1,
+      "attributes": [
+        {
+          "name": "RI",
+          "declaration": "real [1.51115, 1.53393]"
+        },
+        {
+          "name": "Na",
+          "declaration": "real [10.73, 17.38]"
+        },
+        {
+          "name": "Mg",
+          "declaration": "real [0.0, 4.49]"
+        },
+        {
+          "name": "Al",
+          "declaration": "real [0.29, 2.1197]"
+        },
+        {
+          "name": "Si",
+          "declaration": "real [69.81, 75.41]"
+        },
+        {
+          "name": "K",
+          "declaration": "real [0.0, 1.09917]"
+        },
+        {
+          "name": "Ca",
+          "declaration": "real [6.64588, 16.19]"
+        },
+        {
+          "name": "Ba",
+          "declaration": "real [0.0, 3.15]"
+        },
+        {
+          "name": "Fe",
+          "declaration": "real [0.0, 0.51]"
+        },
+        {
+          "name": "typeGlass",
+          "declaration": "{positive,negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\kddcup-land_vs_satan.dat",
+      "file": "kddcup-land_vs_satan.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\kddcup-land_vs_satan.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 242385,
+        "mtime_ns": 1382062892000000000,
+        "sha256": "7bec7ffa2fa417ea00609df4714511572403f323db00571c71b973d53e05bc93"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 1610,
+      "columns": [
+        "Atr-0",
+        "Atr-1",
+        "Atr-2",
+        "Atr-3",
+        "Atr-4",
+        "Atr-5",
+        "Atr-6",
+        "Atr-7",
+        "Atr-8",
+        "Atr-9",
+        "Atr-10",
+        "Atr-11",
+        "Atr-12",
+        "Atr-13",
+        "Atr-14",
+        "Atr-15",
+        "Atr-16",
+        "Atr-17",
+        "Atr-18",
+        "Atr-19",
+        "Atr-20",
+        "Atr-21",
+        "Atr-22",
+        "Atr-23",
+        "Atr-24",
+        "Atr-25",
+        "Atr-26",
+        "Atr-27",
+        "Atr-28",
+        "Atr-29",
+        "Atr-30",
+        "Atr-31",
+        "Atr-32",
+        "Atr-33",
+        "Atr-34",
+        "Atr-35",
+        "Atr-36",
+        "Atr-37",
+        "Atr-38",
+        "Atr-39",
+        "Atr-40",
+        "Class"
+      ],
+      "dimensions": [
+        1610,
+        42
+      ],
+      "raw_feature_count": 41,
+      "candidate_label_columns": [
+        {
+          "column": "Atr-0",
+          "unique": 8,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-1",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-2",
+          "unique": 23,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-3",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-4",
+          "unique": 9,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-5",
+          "unique": 14,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-6",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-7",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-8",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-9",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-10",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-11",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-12",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-13",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-14",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-15",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-16",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-17",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-18",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-19",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-20",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-21",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-23",
+          "unique": 43,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-24",
+          "unique": 42,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-25",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-26",
+          "unique": 45,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-27",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-28",
+          "unique": 70,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-29",
+          "unique": 52,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-30",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-31",
+          "unique": 29,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-32",
+          "unique": 63,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-33",
+          "unique": 46,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-35",
+          "unique": 74,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-36",
+          "unique": 8,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-37",
+          "unique": 52,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-38",
+          "unique": 11,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-40",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 1589,
+        "positive": 21
+      },
+      "last_column_ratios": {
+        "negative": 0.9869565217391304,
+        "positive": 0.013043478260869565
+      },
+      "column_types": {
+        "Atr-0": "numeric",
+        "Atr-1": "non_numeric",
+        "Atr-2": "non_numeric",
+        "Atr-3": "non_numeric",
+        "Atr-4": "numeric",
+        "Atr-5": "numeric",
+        "Atr-6": "numeric",
+        "Atr-7": "numeric",
+        "Atr-8": "numeric",
+        "Atr-9": "numeric",
+        "Atr-10": "numeric",
+        "Atr-11": "numeric",
+        "Atr-12": "numeric",
+        "Atr-13": "numeric",
+        "Atr-14": "numeric",
+        "Atr-15": "numeric",
+        "Atr-16": "numeric",
+        "Atr-17": "numeric",
+        "Atr-18": "numeric",
+        "Atr-19": "numeric",
+        "Atr-20": "numeric",
+        "Atr-21": "numeric",
+        "Atr-22": "numeric",
+        "Atr-23": "numeric",
+        "Atr-24": "numeric",
+        "Atr-25": "numeric",
+        "Atr-26": "numeric",
+        "Atr-27": "numeric",
+        "Atr-28": "numeric",
+        "Atr-29": "numeric",
+        "Atr-30": "numeric",
+        "Atr-31": "numeric",
+        "Atr-32": "numeric",
+        "Atr-33": "numeric",
+        "Atr-34": "numeric",
+        "Atr-35": "numeric",
+        "Atr-36": "numeric",
+        "Atr-37": "numeric",
+        "Atr-38": "numeric",
+        "Atr-39": "numeric",
+        "Atr-40": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Atr-0": 0,
+        "Atr-1": 0,
+        "Atr-2": 0,
+        "Atr-3": 0,
+        "Atr-4": 0,
+        "Atr-5": 0,
+        "Atr-6": 0,
+        "Atr-7": 0,
+        "Atr-8": 0,
+        "Atr-9": 0,
+        "Atr-10": 0,
+        "Atr-11": 0,
+        "Atr-12": 0,
+        "Atr-13": 0,
+        "Atr-14": 0,
+        "Atr-15": 0,
+        "Atr-16": 0,
+        "Atr-17": 0,
+        "Atr-18": 0,
+        "Atr-19": 0,
+        "Atr-20": 0,
+        "Atr-21": 0,
+        "Atr-22": 0,
+        "Atr-23": 0,
+        "Atr-24": 0,
+        "Atr-25": 0,
+        "Atr-26": 0,
+        "Atr-27": 0,
+        "Atr-28": 0,
+        "Atr-29": 0,
+        "Atr-30": 0,
+        "Atr-31": 0,
+        "Atr-32": 0,
+        "Atr-33": 0,
+        "Atr-34": 0,
+        "Atr-35": 0,
+        "Atr-36": 0,
+        "Atr-37": 0,
+        "Atr-38": 0,
+        "Atr-39": 0,
+        "Atr-40": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Atr-1",
+        "Atr-2",
+        "Atr-3",
+        "Class"
+      ],
+      "constant_columns": [
+        "Atr-7",
+        "Atr-8",
+        "Atr-10",
+        "Atr-12",
+        "Atr-13",
+        "Atr-14",
+        "Atr-15",
+        "Atr-16",
+        "Atr-17",
+        "Atr-18",
+        "Atr-19",
+        "Atr-20",
+        "Atr-21"
+      ],
+      "duplicate_rows": 685,
+      "duplicate_feature_rows": 685,
+      "attributes": [
+        {
+          "name": "Atr-0",
+          "declaration": "real [0.0, 58329.0]"
+        },
+        {
+          "name": "Atr-1",
+          "declaration": "{icmp, tcp, udp}"
+        },
+        {
+          "name": "Atr-2",
+          "declaration": "{auth, bgp, courier, csnet_ns, ctf, daytime, discard, domain, domain_u, echo, eco_i, ecr_i, efs, exec, finger, ftp, ftp_data, gopher, hostnames, http, http_443, imap4, IRC, iso_tsap, klogin, kshell, ldap, link, login, mtp, name, netbios_dgm, netbios_ns, netbios_ssn, netstat, nnsp, nntp, ntp_u, other, pm_dump, pop_2, pop_3, printer, private, red_i, remote_job, rje, shell, smtp, sql_net, ssh, sunrpc, supdup, systat, telnet, tftp_u, time, tim_i, urh_i, urp_i, uucp, uucp_path, vmnet, whois, X11, Z39_50}"
+        },
+        {
+          "name": "Atr-3",
+          "declaration": "{OTH, REJ, RSTO, RSTOS0, RSTR, S0, S1, S2, S3, SF, SH}"
+        },
+        {
+          "name": "Atr-4",
+          "declaration": "real [0.0, 6.9337564E8]"
+        },
+        {
+          "name": "Atr-5",
+          "declaration": "real [0.0, 5155468.0]"
+        },
+        {
+          "name": "Atr-6",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-7",
+          "declaration": "{0, 1, 3}"
+        },
+        {
+          "name": "Atr-8",
+          "declaration": "{0, 1, 2, 3}"
+        },
+        {
+          "name": "Atr-9",
+          "declaration": "real [0.0, 30.0]"
+        },
+        {
+          "name": "Atr-10",
+          "declaration": "{0, 1, 2, 3, 4, 5}"
+        },
+        {
+          "name": "Atr-11",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-12",
+          "declaration": "real [0.0, 884.0]"
+        },
+        {
+          "name": "Atr-13",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-14",
+          "declaration": "{0, 1, 2}"
+        },
+        {
+          "name": "Atr-15",
+          "declaration": "real [0.0, 993.0]"
+        },
+        {
+          "name": "Atr-16",
+          "declaration": "real [0.0, 28.0]"
+        },
+        {
+          "name": "Atr-17",
+          "declaration": "{0, 1, 2}"
+        },
+        {
+          "name": "Atr-18",
+          "declaration": "{0, 1, 2, 3, 4, 6, 8}"
+        },
+        {
+          "name": "Atr-19",
+          "declaration": "{0}"
+        },
+        {
+          "name": "Atr-20",
+          "declaration": "{0}"
+        },
+        {
+          "name": "Atr-21",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-22",
+          "declaration": "real [0.0, 511.0]"
+        },
+        {
+          "name": "Atr-23",
+          "declaration": "real [0.0, 511.0]"
+        },
+        {
+          "name": "Atr-24",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-25",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-26",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-27",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-28",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-29",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-30",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-31",
+          "declaration": "real [0.0, 255.0]"
+        },
+        {
+          "name": "Atr-32",
+          "declaration": "real [0.0, 255.0]"
+        },
+        {
+          "name": "Atr-33",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-34",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-35",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-36",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-37",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-38",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-39",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-40",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\kddcup-rootkit-imap_vs_back.dat",
+      "file": "kddcup-rootkit-imap_vs_back.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\kddcup-rootkit-imap_vs_back.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 344247,
+        "mtime_ns": 1382062906000000000,
+        "sha256": "1fa02978381ada9bf52fa49f908e195ade29c0d5599b23cfda1990177f7141ae"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 2225,
+      "columns": [
+        "Atr-0",
+        "Atr-1",
+        "Atr-2",
+        "Atr-3",
+        "Atr-4",
+        "Atr-5",
+        "Atr-6",
+        "Atr-7",
+        "Atr-8",
+        "Atr-9",
+        "Atr-10",
+        "Atr-11",
+        "Atr-12",
+        "Atr-13",
+        "Atr-14",
+        "Atr-15",
+        "Atr-16",
+        "Atr-17",
+        "Atr-18",
+        "Atr-19",
+        "Atr-20",
+        "Atr-21",
+        "Atr-22",
+        "Atr-23",
+        "Atr-24",
+        "Atr-25",
+        "Atr-26",
+        "Atr-27",
+        "Atr-28",
+        "Atr-29",
+        "Atr-30",
+        "Atr-31",
+        "Atr-32",
+        "Atr-33",
+        "Atr-34",
+        "Atr-35",
+        "Atr-36",
+        "Atr-37",
+        "Atr-38",
+        "Atr-39",
+        "Atr-40",
+        "Class"
+      ],
+      "dimensions": [
+        2225,
+        42
+      ],
+      "raw_feature_count": 41,
+      "candidate_label_columns": [
+        {
+          "column": "Atr-0",
+          "unique": 21,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-1",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-2",
+          "unique": 6,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-3",
+          "unique": 6,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-4",
+          "unique": 55,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-5",
+          "unique": 19,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-6",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-7",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-8",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-9",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-10",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-11",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-12",
+          "unique": 6,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-13",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-14",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-15",
+          "unique": 6,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-16",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-17",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-18",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-19",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-20",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-21",
+          "unique": 1,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-22",
+          "unique": 15,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-23",
+          "unique": 23,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-24",
+          "unique": 8,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-25",
+          "unique": 10,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-26",
+          "unique": 15,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-27",
+          "unique": 19,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-28",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-29",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-30",
+          "unique": 20,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-33",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-34",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-35",
+          "unique": 24,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-36",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-37",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-38",
+          "unique": 14,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-39",
+          "unique": 52,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Atr-40",
+          "unique": 51,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 2203,
+        "positive": 22
+      },
+      "last_column_ratios": {
+        "negative": 0.9901123595505618,
+        "positive": 0.009887640449438202
+      },
+      "column_types": {
+        "Atr-0": "numeric",
+        "Atr-1": "non_numeric",
+        "Atr-2": "non_numeric",
+        "Atr-3": "non_numeric",
+        "Atr-4": "numeric",
+        "Atr-5": "numeric",
+        "Atr-6": "numeric",
+        "Atr-7": "numeric",
+        "Atr-8": "numeric",
+        "Atr-9": "numeric",
+        "Atr-10": "numeric",
+        "Atr-11": "numeric",
+        "Atr-12": "numeric",
+        "Atr-13": "numeric",
+        "Atr-14": "numeric",
+        "Atr-15": "numeric",
+        "Atr-16": "numeric",
+        "Atr-17": "numeric",
+        "Atr-18": "numeric",
+        "Atr-19": "numeric",
+        "Atr-20": "numeric",
+        "Atr-21": "numeric",
+        "Atr-22": "numeric",
+        "Atr-23": "numeric",
+        "Atr-24": "numeric",
+        "Atr-25": "numeric",
+        "Atr-26": "numeric",
+        "Atr-27": "numeric",
+        "Atr-28": "numeric",
+        "Atr-29": "numeric",
+        "Atr-30": "numeric",
+        "Atr-31": "numeric",
+        "Atr-32": "numeric",
+        "Atr-33": "numeric",
+        "Atr-34": "numeric",
+        "Atr-35": "numeric",
+        "Atr-36": "numeric",
+        "Atr-37": "numeric",
+        "Atr-38": "numeric",
+        "Atr-39": "numeric",
+        "Atr-40": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Atr-0": 0,
+        "Atr-1": 0,
+        "Atr-2": 0,
+        "Atr-3": 0,
+        "Atr-4": 0,
+        "Atr-5": 0,
+        "Atr-6": 0,
+        "Atr-7": 0,
+        "Atr-8": 0,
+        "Atr-9": 0,
+        "Atr-10": 0,
+        "Atr-11": 0,
+        "Atr-12": 0,
+        "Atr-13": 0,
+        "Atr-14": 0,
+        "Atr-15": 0,
+        "Atr-16": 0,
+        "Atr-17": 0,
+        "Atr-18": 0,
+        "Atr-19": 0,
+        "Atr-20": 0,
+        "Atr-21": 0,
+        "Atr-22": 0,
+        "Atr-23": 0,
+        "Atr-24": 0,
+        "Atr-25": 0,
+        "Atr-26": 0,
+        "Atr-27": 0,
+        "Atr-28": 0,
+        "Atr-29": 0,
+        "Atr-30": 0,
+        "Atr-31": 0,
+        "Atr-32": 0,
+        "Atr-33": 0,
+        "Atr-34": 0,
+        "Atr-35": 0,
+        "Atr-36": 0,
+        "Atr-37": 0,
+        "Atr-38": 0,
+        "Atr-39": 0,
+        "Atr-40": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Atr-1",
+        "Atr-2",
+        "Atr-3",
+        "Class"
+      ],
+      "constant_columns": [
+        "Atr-6",
+        "Atr-7",
+        "Atr-14",
+        "Atr-17",
+        "Atr-18",
+        "Atr-19",
+        "Atr-20",
+        "Atr-21"
+      ],
+      "duplicate_rows": 1235,
+      "duplicate_feature_rows": 1235,
+      "attributes": [
+        {
+          "name": "Atr-0",
+          "declaration": "real [0.0, 58329.0]"
+        },
+        {
+          "name": "Atr-1",
+          "declaration": "{icmp, tcp, udp}"
+        },
+        {
+          "name": "Atr-2",
+          "declaration": "{auth, bgp, courier, csnet_ns, ctf, daytime, discard, domain, domain_u, echo, eco_i, ecr_i, efs, exec, finger, ftp, ftp_data, gopher, hostnames, http, http_443, imap4, IRC, iso_tsap, klogin, kshell, ldap, link, login, mtp, name, netbios_dgm, netbios_ns, netbios_ssn, netstat, nnsp, nntp, ntp_u, other, pm_dump, pop_2, pop_3, printer, private, red_i, remote_job, rje, shell, smtp, sql_net, ssh, sunrpc, supdup, systat, telnet, tftp_u, time, tim_i, urh_i, urp_i, uucp, uucp_path, vmnet, whois, X11, Z39_50}"
+        },
+        {
+          "name": "Atr-3",
+          "declaration": "{OTH, REJ, RSTO, RSTOS0, RSTR, S0, S1, S2, S3, SF, SH}"
+        },
+        {
+          "name": "Atr-4",
+          "declaration": "real [0.0, 6.9337564E8]"
+        },
+        {
+          "name": "Atr-5",
+          "declaration": "real [0.0, 5155468.0]"
+        },
+        {
+          "name": "Atr-6",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-7",
+          "declaration": "{0, 1, 3}"
+        },
+        {
+          "name": "Atr-8",
+          "declaration": "{0, 1, 2, 3}"
+        },
+        {
+          "name": "Atr-9",
+          "declaration": "real [0.0, 30.0]"
+        },
+        {
+          "name": "Atr-10",
+          "declaration": "{0, 1, 2, 3, 4, 5}"
+        },
+        {
+          "name": "Atr-11",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-12",
+          "declaration": "real [0.0, 884.0]"
+        },
+        {
+          "name": "Atr-13",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-14",
+          "declaration": "{0, 1, 2}"
+        },
+        {
+          "name": "Atr-15",
+          "declaration": "real [0.0, 993.0]"
+        },
+        {
+          "name": "Atr-16",
+          "declaration": "real [0.0, 28.0]"
+        },
+        {
+          "name": "Atr-17",
+          "declaration": "{0, 1, 2}"
+        },
+        {
+          "name": "Atr-18",
+          "declaration": "{0, 1, 2, 3, 4, 6, 8}"
+        },
+        {
+          "name": "Atr-19",
+          "declaration": "{0}"
+        },
+        {
+          "name": "Atr-20",
+          "declaration": "{0}"
+        },
+        {
+          "name": "Atr-21",
+          "declaration": "{0, 1}"
+        },
+        {
+          "name": "Atr-22",
+          "declaration": "real [0.0, 511.0]"
+        },
+        {
+          "name": "Atr-23",
+          "declaration": "real [0.0, 511.0]"
+        },
+        {
+          "name": "Atr-24",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-25",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-26",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-27",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-28",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-29",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-30",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-31",
+          "declaration": "real [0.0, 255.0]"
+        },
+        {
+          "name": "Atr-32",
+          "declaration": "real [0.0, 255.0]"
+        },
+        {
+          "name": "Atr-33",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-34",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-35",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-36",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-37",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-38",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-39",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Atr-40",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\poker-8_vs_6.dat",
+      "file": "poker-8_vs_6.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\poker-8_vs_6.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 47078,
+        "mtime_ns": 1382062972000000000,
+        "sha256": "d9e5ef8e2337d1e91d87e4ebffd90d12b5e10b8b231a34d0f66098ba49782b22"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 1477,
+      "columns": [
+        "S1",
+        "C1",
+        "S2",
+        "C2",
+        "S3",
+        "C3",
+        "S4",
+        "C4",
+        "S5",
+        "C5",
+        "Class"
+      ],
+      "dimensions": [
+        1477,
+        11
+      ],
+      "raw_feature_count": 10,
+      "candidate_label_columns": [
+        {
+          "column": "S1",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "C1",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "S2",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "C2",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "S3",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "C3",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "S4",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "C4",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "S5",
+          "unique": 4,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "C5",
+          "unique": 13,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 1460,
+        "positive": 17
+      },
+      "last_column_ratios": {
+        "negative": 0.988490182802979,
+        "positive": 0.011509817197020988
+      },
+      "column_types": {
+        "S1": "numeric",
+        "C1": "numeric",
+        "S2": "numeric",
+        "C2": "numeric",
+        "S3": "numeric",
+        "C3": "numeric",
+        "S4": "numeric",
+        "C4": "numeric",
+        "S5": "numeric",
+        "C5": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "S1": 0,
+        "C1": 0,
+        "S2": 0,
+        "C2": 0,
+        "S3": 0,
+        "C3": 0,
+        "S4": 0,
+        "C4": 0,
+        "S5": 0,
+        "C5": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 2,
+      "duplicate_feature_rows": 2,
+      "attributes": [
+        {
+          "name": "S1",
+          "declaration": "integer[1,4]"
+        },
+        {
+          "name": "C1",
+          "declaration": "integer[1,13]"
+        },
+        {
+          "name": "S2",
+          "declaration": "integer[1,4]"
+        },
+        {
+          "name": "C2",
+          "declaration": "integer[1,13]"
+        },
+        {
+          "name": "S3",
+          "declaration": "integer[1,4]"
+        },
+        {
+          "name": "C3",
+          "declaration": "integer[1,13]"
+        },
+        {
+          "name": "S4",
+          "declaration": "integer[1,4]"
+        },
+        {
+          "name": "C4",
+          "declaration": "integer[1,13]"
+        },
+        {
+          "name": "S5",
+          "declaration": "integer[1,4]"
+        },
+        {
+          "name": "C5",
+          "declaration": "integer[1,13]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\winequality-white-3_vs_7.dat",
+      "file": "winequality-white-3_vs_7.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\winequality-white-3_vs_7.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 60847,
+        "mtime_ns": 1382063110000000000,
+        "sha256": "0b925e2f923b951caccbfe6b34d44ac8d0f3815a7183f2e5926c872bd9a3e92c"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 900,
+      "columns": [
+        "FixedAcidity",
+        "VolatileAcidity",
+        "CitricAcid",
+        "ResidualSugar",
+        "Chlorides",
+        "FreeSulfurDioxide",
+        "TotalSulfurDioxide",
+        "Density",
+        "PH",
+        "Sulphates",
+        "Alcohol",
+        "Class"
+      ],
+      "dimensions": [
+        900,
+        12
+      ],
+      "raw_feature_count": 11,
+      "candidate_label_columns": [
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 880,
+        "positive": 20
+      },
+      "last_column_ratios": {
+        "negative": 0.9777777777777777,
+        "positive": 0.022222222222222223
+      },
+      "column_types": {
+        "FixedAcidity": "numeric",
+        "VolatileAcidity": "numeric",
+        "CitricAcid": "numeric",
+        "ResidualSugar": "numeric",
+        "Chlorides": "numeric",
+        "FreeSulfurDioxide": "numeric",
+        "TotalSulfurDioxide": "numeric",
+        "Density": "numeric",
+        "PH": "numeric",
+        "Sulphates": "numeric",
+        "Alcohol": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "FixedAcidity": 0,
+        "VolatileAcidity": 0,
+        "CitricAcid": 0,
+        "ResidualSugar": 0,
+        "Chlorides": 0,
+        "FreeSulfurDioxide": 0,
+        "TotalSulfurDioxide": 0,
+        "Density": 0,
+        "PH": 0,
+        "Sulphates": 0,
+        "Alcohol": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 191,
+      "duplicate_feature_rows": 191,
+      "attributes": [
+        {
+          "name": "FixedAcidity",
+          "declaration": "real[3.8,14.2]"
+        },
+        {
+          "name": "VolatileAcidity",
+          "declaration": "real[0.08,1.1]"
+        },
+        {
+          "name": "CitricAcid",
+          "declaration": "real[0.0,1.66]"
+        },
+        {
+          "name": "ResidualSugar",
+          "declaration": "real[0.6,65.8]"
+        },
+        {
+          "name": "Chlorides",
+          "declaration": "real[0.0090,0.346]"
+        },
+        {
+          "name": "FreeSulfurDioxide",
+          "declaration": "real[2.0,289.0]"
+        },
+        {
+          "name": "TotalSulfurDioxide",
+          "declaration": "real[9.0,440.0]"
+        },
+        {
+          "name": "Density",
+          "declaration": "real[0.98711,1.03898]"
+        },
+        {
+          "name": "PH",
+          "declaration": "real[2.72,3.82]"
+        },
+        {
+          "name": "Sulphates",
+          "declaration": "real[0.22,1.08]"
+        },
+        {
+          "name": "Alcohol",
+          "declaration": "real[8.0,14.2]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\winequality-white-9_vs_4.dat",
+      "file": "winequality-white-9_vs_4.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\winequality-white-9_vs_4.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 11767,
+        "mtime_ns": 1382063126000000000,
+        "sha256": "e8dcb9ad25267455154e9b2763bf4f36c3bbbde394d10a4d37d4696e93ba708a"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 168,
+      "columns": [
+        "FixedAcidity",
+        "VolatileAcidity",
+        "CitricAcid",
+        "ResidualSugar",
+        "Chlorides",
+        "FreeSulfurDioxide",
+        "TotalSulfurDioxide",
+        "Density",
+        "PH",
+        "Sulphates",
+        "Alcohol",
+        "Class"
+      ],
+      "dimensions": [
+        168,
+        12
+      ],
+      "raw_feature_count": 11,
+      "candidate_label_columns": [
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 163,
+        "positive": 5
+      },
+      "last_column_ratios": {
+        "negative": 0.9702380952380952,
+        "positive": 0.02976190476190476
+      },
+      "column_types": {
+        "FixedAcidity": "numeric",
+        "VolatileAcidity": "numeric",
+        "CitricAcid": "numeric",
+        "ResidualSugar": "numeric",
+        "Chlorides": "numeric",
+        "FreeSulfurDioxide": "numeric",
+        "TotalSulfurDioxide": "numeric",
+        "Density": "numeric",
+        "PH": "numeric",
+        "Sulphates": "numeric",
+        "Alcohol": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "FixedAcidity": 0,
+        "VolatileAcidity": 0,
+        "CitricAcid": 0,
+        "ResidualSugar": 0,
+        "Chlorides": 0,
+        "FreeSulfurDioxide": 0,
+        "TotalSulfurDioxide": 0,
+        "Density": 0,
+        "PH": 0,
+        "Sulphates": 0,
+        "Alcohol": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 10,
+      "duplicate_feature_rows": 10,
+      "attributes": [
+        {
+          "name": "FixedAcidity",
+          "declaration": "real[3.8,14.2]"
+        },
+        {
+          "name": "VolatileAcidity",
+          "declaration": "real[0.08,1.1]"
+        },
+        {
+          "name": "CitricAcid",
+          "declaration": "real[0.0,1.66]"
+        },
+        {
+          "name": "ResidualSugar",
+          "declaration": "real[0.6,65.8]"
+        },
+        {
+          "name": "Chlorides",
+          "declaration": "real[0.0090,0.346]"
+        },
+        {
+          "name": "FreeSulfurDioxide",
+          "declaration": "real[2.0,289.0]"
+        },
+        {
+          "name": "TotalSulfurDioxide",
+          "declaration": "real[9.0,440.0]"
+        },
+        {
+          "name": "Density",
+          "declaration": "real[0.98711,1.03898]"
+        },
+        {
+          "name": "PH",
+          "declaration": "real[2.72,3.82]"
+        },
+        {
+          "name": "Sulphates",
+          "declaration": "real[0.22,1.08]"
+        },
+        {
+          "name": "Alcohol",
+          "declaration": "real[8.0,14.2]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast-1-2-8-9_vs_7.dat",
+      "file": "yeast-1-2-8-9_vs_7.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast-1-2-8-9_vs_7.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 44373,
+        "mtime_ns": 1263727376000000000,
+        "sha256": "dd745b0cf0c61f035f362d5cc7a57c84a422f3029c18f20db2b6caa548f32237"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 947,
+      "columns": [
+        "Mcg",
+        "Gvh",
+        "Alm",
+        "Mit",
+        "Erl",
+        "Pox",
+        "Vac",
+        "Nuc",
+        "Class"
+      ],
+      "dimensions": [
+        947,
+        9
+      ],
+      "raw_feature_count": 8,
+      "candidate_label_columns": [
+        {
+          "column": "Alm",
+          "unique": 43,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Erl",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Pox",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Vac",
+          "unique": 46,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 917,
+        "positive": 30
+      },
+      "last_column_ratios": {
+        "negative": 0.9683210137275607,
+        "positive": 0.03167898627243928
+      },
+      "column_types": {
+        "Mcg": "numeric",
+        "Gvh": "numeric",
+        "Alm": "numeric",
+        "Mit": "numeric",
+        "Erl": "numeric",
+        "Pox": "numeric",
+        "Vac": "numeric",
+        "Nuc": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Mcg": 0,
+        "Gvh": 0,
+        "Alm": 0,
+        "Mit": 0,
+        "Erl": 0,
+        "Pox": 0,
+        "Vac": 0,
+        "Nuc": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 29,
+      "duplicate_feature_rows": 29,
+      "attributes": [
+        {
+          "name": "Mcg",
+          "declaration": "real [0.11, 1.0]"
+        },
+        {
+          "name": "Gvh",
+          "declaration": "real [0.13, 1.0]"
+        },
+        {
+          "name": "Alm",
+          "declaration": "real [0.21, 1.0]"
+        },
+        {
+          "name": "Mit",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Erl",
+          "declaration": "real [0.5, 1.0]"
+        },
+        {
+          "name": "Pox",
+          "declaration": "real [0.0, 0.83]"
+        },
+        {
+          "name": "Vac",
+          "declaration": "real [0.0, 0.73]"
+        },
+        {
+          "name": "Nuc",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive,negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast5.dat",
+      "file": "yeast5.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast5.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 84965,
+        "mtime_ns": 1263729134000000000,
+        "sha256": "6c130fd581a617e8600712f633641cd2107a1f5f7f2132c43dea89f2868072a7"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 1484,
+      "columns": [
+        "Mcg",
+        "Gvh",
+        "Alm",
+        "Mit",
+        "Erl",
+        "Pox",
+        "Vac",
+        "Nuc",
+        "Class"
+      ],
+      "dimensions": [
+        1484,
+        9
+      ],
+      "raw_feature_count": 8,
+      "candidate_label_columns": [
+        {
+          "column": "Alm",
+          "unique": 53,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Erl",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Pox",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Vac",
+          "unique": 48,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Nuc",
+          "unique": 68,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 1440,
+        "positive": 44
+      },
+      "last_column_ratios": {
+        "negative": 0.9703504043126685,
+        "positive": 0.029649595687331536
+      },
+      "column_types": {
+        "Mcg": "numeric",
+        "Gvh": "numeric",
+        "Alm": "numeric",
+        "Mit": "numeric",
+        "Erl": "numeric",
+        "Pox": "numeric",
+        "Vac": "numeric",
+        "Nuc": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Mcg": 0,
+        "Gvh": 0,
+        "Alm": 0,
+        "Mit": 0,
+        "Erl": 0,
+        "Pox": 0,
+        "Vac": 0,
+        "Nuc": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 31,
+      "duplicate_feature_rows": 31,
+      "attributes": [
+        {
+          "name": "Mcg",
+          "declaration": "real [0.11, 1.0]"
+        },
+        {
+          "name": "Gvh",
+          "declaration": "real [0.13, 1.0]"
+        },
+        {
+          "name": "Alm",
+          "declaration": "real [0.21, 1.0]"
+        },
+        {
+          "name": "Mit",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Erl",
+          "declaration": "real [0.5, 1.0]"
+        },
+        {
+          "name": "Pox",
+          "declaration": "real [0.0, 0.83]"
+        },
+        {
+          "name": "Vac",
+          "declaration": "real [0.0, 0.73]"
+        },
+        {
+          "name": "Nuc",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    },
+    {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast6.dat",
+      "file": "yeast6.dat",
+      "format": ".dat",
+      "fingerprint": {
+        "path": "C:\\Users\\k64183565\\Desktop\\w\\数据\\yeast6.dat",
+        "exists": true,
+        "kind": "file",
+        "bytes": 84965,
+        "mtime_ns": 1263729334000000000,
+        "sha256": "8a245638352ce0ff018b729dfb5ce48c3323653df41ae305093eecd38cb2c4cf"
+      },
+      "parse_status": "success",
+      "parser": "KEEL @attribute/@data",
+      "rows": 1484,
+      "columns": [
+        "Mcg",
+        "Gvh",
+        "Alm",
+        "Mit",
+        "Erl",
+        "Pox",
+        "Vac",
+        "Nuc",
+        "Class"
+      ],
+      "dimensions": [
+        1484,
+        9
+      ],
+      "raw_feature_count": 8,
+      "candidate_label_columns": [
+        {
+          "column": "Alm",
+          "unique": 53,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Erl",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Pox",
+          "unique": 3,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Vac",
+          "unique": 48,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Nuc",
+          "unique": 68,
+          "reason": "低基数，仅为候选"
+        },
+        {
+          "column": "Class",
+          "unique": 2,
+          "reason": "低基数，仅为候选"
+        }
+      ],
+      "observed_last_column": "Class",
+      "last_column_counts": {
+        "negative": 1449,
+        "positive": 35
+      },
+      "last_column_ratios": {
+        "negative": 0.9764150943396226,
+        "positive": 0.02358490566037736
+      },
+      "column_types": {
+        "Mcg": "numeric",
+        "Gvh": "numeric",
+        "Alm": "numeric",
+        "Mit": "numeric",
+        "Erl": "numeric",
+        "Pox": "numeric",
+        "Vac": "numeric",
+        "Nuc": "numeric",
+        "Class": "non_numeric"
+      },
+      "missing_by_column": {
+        "Mcg": 0,
+        "Gvh": 0,
+        "Alm": 0,
+        "Mit": 0,
+        "Erl": 0,
+        "Pox": 0,
+        "Vac": 0,
+        "Nuc": 0,
+        "Class": 0
+      },
+      "non_numeric_columns": [
+        "Class"
+      ],
+      "constant_columns": [],
+      "duplicate_rows": 31,
+      "duplicate_feature_rows": 31,
+      "attributes": [
+        {
+          "name": "Mcg",
+          "declaration": "real [0.11, 1.0]"
+        },
+        {
+          "name": "Gvh",
+          "declaration": "real [0.13, 1.0]"
+        },
+        {
+          "name": "Alm",
+          "declaration": "real [0.21, 1.0]"
+        },
+        {
+          "name": "Mit",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Erl",
+          "declaration": "real [0.5, 1.0]"
+        },
+        {
+          "name": "Pox",
+          "declaration": "real [0.0, 0.83]"
+        },
+        {
+          "name": "Vac",
+          "declaration": "real [0.0, 0.73]"
+        },
+        {
+          "name": "Nuc",
+          "declaration": "real [0.0, 1.0]"
+        },
+        {
+          "name": "Class",
+          "declaration": "{positive, negative}"
+        }
+      ],
+      "leakage_risks": [
+        "标签语义、标签派生字段、近重复跨拆分、时间/组依赖和标识符不能仅凭静态文件排除；需人工核验。"
+      ]
+    }
+  ],
+  "reference_pdf": {
+    "path": "C:\\Users\\k64183565\\Desktop\\w\\xin\\郭论文.pdf",
+    "exists": true,
+    "fingerprint": {
+      "path": "C:\\Users\\k64183565\\Desktop\\w\\xin\\郭论文.pdf",
+      "exists": true,
+      "kind": "file",
+      "bytes": 1891239,
+      "mtime_ns": 1789609499000000000,
+      "sha256": "64e77b0213ab7b1c6c6ff1febf26dd5c24feb1ce6a3db1d279462fa01951e60a"
+    },
+    "status": "not_extracted",
+    "reason": "ModuleNotFoundError: No module named 'pypdf'",
+    "suggested_package": "pypdf==4.3.1"
+  }
+}

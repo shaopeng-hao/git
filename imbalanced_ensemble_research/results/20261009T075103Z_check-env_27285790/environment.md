@@ -1,0 +1,46 @@
+# 依赖状态报告
+
+```json
+{
+  "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Users\\k64183565\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": {
+      "available": true,
+      "version": "2.5.3",
+      "suggested_fixed_version": "1.26.4"
+    },
+    "pandas": {
+      "available": true,
+      "version": "3.0.6",
+      "suggested_fixed_version": "2.2.3"
+    },
+    "scikit-learn": {
+      "available": true,
+      "version": "1.9.1",
+      "suggested_fixed_version": "1.5.2"
+    },
+    "matplotlib": {
+      "available": false,
+      "version": null,
+      "suggested_fixed_version": "3.9.2",
+      "blocked_function": "图表"
+    },
+    "imbalanced-learn": {
+      "available": false,
+      "version": null,
+      "suggested_fixed_version": "0.12.4",
+      "blocked_function": "RUSBoost"
+    },
+    "pypdf": {
+      "available": false,
+      "version": null,
+      "suggested_fixed_version": "4.3.1",
+      "blocked_function": "PDF 文本/格式提取"
+    }
+  },
+  "network_used": false,
+  "installation_performed": false
+}
+```
