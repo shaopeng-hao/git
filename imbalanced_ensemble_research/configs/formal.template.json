@@ -1,9 +1,10 @@
 {
+  "requires_user_label_semantics_confirmation": true,
   "inputs": {"data_dir": "C:/Users/k64183565/Desktop/w/数据", "reference_pdf": "C:/Users/k64183565/Desktop/w/xin/郭论文.pdf"},
   "outputs": {"root": "../results"},
-  "experiment": {"seeds": [20261009, 20261010], "split": [0.7, 0.2, 0.1]},
+  "experiment": {"profile": "formal_template", "seeds": [20261009, 20261010], "split": [0.7, 0.2, 0.1]},
   "datasets": [],
-  "preprocessing": {"drop_columns": [], "categorical_columns": [], "identifier_columns": []},
+  "preprocessing": {"drop_columns": [], "categorical_columns": [], "identifier_columns": [], "numeric_columns": []},
   "models": {
     "rbf_svm": {"C": 1.0, "gamma": "scale", "probability": true, "class_weight": null, "tol": 0.001, "max_iter": -1},
     "random_forest": {"n_estimators": 200, "class_weight": null},

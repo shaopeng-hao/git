@@ -32,18 +32,61 @@ def jsonable(value: Any) -> Any:
     raise TypeError(type(value).__name__)
 
 
+def _configured_columns(value: Any, key: str) -> list[str]:
+    if not isinstance(value, list) or any(not isinstance(column, str) or not column for column in value):
+        raise ValueError(f"preprocessing.{key} 必须是非空列名组成的列表（可为空列表）")
+    if len(set(value)) != len(value):
+        raise ValueError(f"preprocessing.{key} 包含重复列名")
+    return value
+
+
+def validate_preprocessing_columns(feature_names: list[str], preprocessing: dict) -> dict:
+    """Validate the complete raw-column policy before train-only fitting."""
+    required = ("drop_columns", "categorical_columns", "identifier_columns", "numeric_columns")
+    if not isinstance(preprocessing, dict) or any(key not in preprocessing for key in required):
+        raise ValueError("preprocessing 必须声明 drop_columns、categorical_columns、identifier_columns 和 numeric_columns")
+    groups = {key: _configured_columns(preprocessing[key], key) for key in required}
+    configured = [column for columns in groups.values() for column in columns]
+    if len(set(configured)) != len(configured):
+        raise ValueError("预处理列不能同时属于多个处理组")
+    unknown = sorted(set(configured) - set(feature_names))
+    if unknown:
+        raise ValueError(f"预处理配置包含不存在的特征列: {unknown}")
+    retained = set(feature_names) - set(groups["drop_columns"]) - set(groups["identifier_columns"])
+    classified = set(groups["numeric_columns"]) | set(groups["categorical_columns"])
+    if retained != classified:
+        missing = sorted(retained - classified); extra = sorted(classified - retained)
+        raise ValueError(f"每个保留特征必须恰好声明为 numeric 或 categorical; 缺少={missing}, 非保留={extra}")
+    return {"raw_features": list(feature_names), "configured": groups, "retained_features": [x for x in feature_names if x in retained]}
+
+
 def load_config(path: str | Path) -> tuple[dict, Path]:
     path = Path(path).resolve()
     raw = json.loads(path.read_text(encoding="utf-8"))
-    for section in ("inputs", "outputs", "experiment", "datasets", "models", "optimization", "promethee"):
+    for section in ("inputs", "outputs", "experiment", "datasets", "preprocessing", "models", "optimization", "promethee"):
         if section not in raw: raise ValueError(f"配置缺少 {section}")
-    if raw["experiment"]["split"] != [0.7, 0.2, 0.1] or not raw["experiment"]["seeds"]:
+    experiment = raw["experiment"]
+    if experiment["split"] != [0.7, 0.2, 0.1] or not experiment["seeds"]:
         raise ValueError("split 必须为 [0.7,0.2,0.1] 且 seeds 非空")
+    profile = experiment.get("profile")
+    if profile not in ("smoke", "formal", "formal_template"):
+        raise ValueError("experiment.profile 必须为 smoke、formal 或 formal_template")
     opt = raw["optimization"]
     if opt["population_size"] < 4 or opt["K"] != opt["population_size"] or opt["generations"] < 1:
         raise ValueError("population_size>=4、K 必须等于 population_size、generations>=1")
+    threshold = opt.get("threshold")
+    if not isinstance(threshold, (int, float)) or isinstance(threshold, bool) or not math.isfinite(threshold) or not 0 <= threshold <= 1:
+        raise ValueError("optimization.threshold 必须属于 [0,1]")
     if not 0 <= opt["CR"] <= 1 or opt["F"] <= 0 or len(opt["complexity_weights"]) != 4 or not math.isclose(sum(opt["complexity_weights"]), 1.0):
         raise ValueError("优化参数或复杂度权重无效")
+    if profile == "smoke" and (opt["population_size"], opt["generations"]) != (4, 2):
+        raise ValueError("smoke 配置必须使用 N=K=4、generations=2")
+    if profile in ("formal", "formal_template") and (opt["population_size"], opt["generations"]) != (20, 100):
+        raise ValueError("formal 配置必须使用 N=K=20、generations=100")
+    if profile == "formal_template" and (not raw.get("requires_user_label_semantics_confirmation") or raw["datasets"]):
+        raise ValueError("formal_template 必须标记标签语义待确认且不含数据集")
+    for key in ("drop_columns", "categorical_columns", "identifier_columns", "numeric_columns"):
+        _configured_columns(raw["preprocessing"].get(key), key)
     prom = raw["promethee"]
     if not (0 <= prom["q"] < prom["p"] <= 1) or len(prom["weights"]) != 3 or not math.isclose(sum(prom["weights"]), 1.0):
         raise ValueError("PROMETHEE 参数无效")
@@ -166,7 +209,7 @@ def load_dataset(spec: dict):
     return X, y, features, {"columns": cols, "label_mapping": {"positive_original": spec["positive_label"], "negative_original": next(x for x in unique if x != spec["positive_label"])}, "attributes": attrs}
 
 
-def metric_record(y_true, y_pred, scores=None) -> dict:
+def metric_record(y_true, y_pred, scores=None, threshold=None) -> dict:
     tn = fp = fn = tp = 0
     for y, p in zip(y_true, y_pred):
         if y == 0 and p == 0: tn += 1
@@ -178,10 +221,26 @@ def metric_record(y_true, y_pred, scores=None) -> dict:
     f1 = None if precision is None or recall is None or precision+recall == 0 else 2*precision*recall/(precision+recall)
     gmean = None if recall is None or tnr is None else math.sqrt(recall*tnr)
     out = {"confusion_matrix": [[tn,fp],[fn,tp]], "FPR": fpr, "FNR": fnr, "precision": precision, "recall": recall, "F1": f1, "G_mean": gmean, "ROC_AUC": None, "PR_AUC": None, "not_computable_reason": []}
+    if threshold is not None: out["decision_threshold"] = threshold
     if scores is not None and len(set(y_true)) == 2:
         try:
-            from sklearn.metrics import roc_auc_score, average_precision_score
-            out["ROC_AUC"], out["PR_AUC"] = roc_auc_score(y_true,scores), average_precision_score(y_true,scores)
+            ordered=sorted(zip(scores,y_true), key=lambda pair: pair[0])
+            positive_count=sum(y_true); negative_count=len(y_true)-positive_count
+            ranks=[]; position=0
+            while position < len(ordered):
+                end=position+1
+                while end < len(ordered) and ordered[end][0] == ordered[position][0]: end += 1
+                ranks.extend([(position+1+end)/2]*(end-position)); position=end
+            positive_rank_sum=sum(rank for rank,(_,label) in zip(ranks,ordered) if label == 1)
+            out["ROC_AUC"]=(positive_rank_sum-positive_count*(positive_count+1)/2)/(positive_count*negative_count)
+            descending=sorted(zip(scores,y_true), key=lambda pair: pair[0], reverse=True)
+            true_positive=false_positive=0; average_precision=0.0; position=0
+            while position < len(descending):
+                end=position+1
+                while end < len(descending) and descending[end][0] == descending[position][0]: end += 1
+                positives=sum(label for _,label in descending[position:end]); true_positive += positives; false_positive += end-position-positives
+                average_precision += (true_positive/(true_positive+false_positive))*positives/positive_count; position=end
+            out["PR_AUC"]=average_precision
         except Exception as exc: out["not_computable_reason"].append(f"AUC: {type(exc).__name__}")
     else: out["not_computable_reason"].append("无连续得分或测试集不含两类")
     return out

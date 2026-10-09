@@ -1,9 +1,9 @@
 {
   "inputs": {"data_dir": "C:/Users/k64183565/Desktop/w/数据", "reference_pdf": "C:/Users/k64183565/Desktop/w/xin/郭论文.pdf"},
   "outputs": {"root": "../results"},
-  "experiment": {"seeds": [20261009], "split": [0.7, 0.2, 0.1]},
+  "experiment": {"profile": "smoke", "seeds": [20261009], "split": [0.7, 0.2, 0.1]},
   "datasets": [{"id": "ecoli_0_1_4_6_vs_5_smoke", "path": "C:/Users/k64183565/Desktop/w/数据/ecoli-0-1-4-6_vs_5.dat", "format": "keel_dat", "label_column": "class", "positive_label": "positive", "header": false}],
-  "preprocessing": {"drop_columns": [], "categorical_columns": [], "identifier_columns": []},
+  "preprocessing": {"drop_columns": [], "categorical_columns": [], "identifier_columns": [], "numeric_columns": ["a1", "a2", "a3", "a5", "a6", "a7"]},
   "models": {"rbf_svm": {"C": 1.0, "gamma": "scale", "probability": true, "class_weight": null, "tol": 0.001, "max_iter": -1}, "random_forest": {"n_estimators": 20, "class_weight": null}, "rusboost": {"n_estimators": 10}},
   "optimization": {"enabled": true, "population_size": 4, "generations": 2, "K": 4, "CR": 0.2, "F": 0.5, "threshold": 0.5, "complexity_weights": [0.35, 0.35, 0.20, 0.10], "non_dominated_tie_break": "sum_then_uid"},
   "promethee": {"weights": [0.45, 0.45, 0.10], "q": 0.01, "p": 0.05}
