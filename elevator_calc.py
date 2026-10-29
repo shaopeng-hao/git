@@ -151,13 +151,17 @@ class ElevationCalculator:
             v_dir[i] = v
             s_trip[i] = s
 
-        # 连续累积位移 = 每趟 trip 位移累加
+        # 连续累积位移: 逐行累加 trip 的增量
+        # 段开头 s_trip 归零会导致跳变(负), 必须跳过
         s_cont = np.zeros(n)
         cum = 0.0
         for i in range(n):
-            if i > 0 and i in seg_starts:
-                pass  # 新段开始, 不加 trip 的归零
-            cum += (s_trip[i] - s_trip[i - 1]) if i > 0 else s_trip[i]
+            if i == 0:
+                cum = s_trip[i]                    # Row 0: 直接用 trip 值
+            elif i in seg_starts:
+                cum += s_trip[i]                   # 段开头: 只加这一行新积分的值
+            else:
+                cum += (s_trip[i] - s_trip[i - 1]) # 段内: 加增量
             s_cont[i] = cum
 
         return v_dir, s_trip, s_cont
