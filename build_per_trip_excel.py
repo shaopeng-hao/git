@@ -6,8 +6,6 @@
 import sys, ast
 import numpy as np
 import pandas as pd
-from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 
 sys.path.insert(0, '/workspace')
 from elevator_speed_distance import (
@@ -134,86 +132,17 @@ for i, (s, e) in enumerate(trips):
 
 acc = pd.DataFrame(rows)
 
-# ========== 4. 写 Excel ==========
-wb = Workbook()
-wb.remove(wb.active)
-
-HEADER_FILL = PatternFill('solid', fgColor='1F4E78')
-HEADER_FONT = Font(bold=True, color='FFFFFF', name='Arial', size=11)
-BODY_FONT = Font(name='Arial', size=10)
-ZEBRA1 = PatternFill('solid', fgColor='FFFFFF')
-ZEBRA2 = PatternFill('solid', fgColor='F7F9FC')
-THIN = Side(style='thin', color='D9DEE7')
-BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
-CENTER = Alignment(horizontal='center', vertical='center')
-
-def write_df(ws, df_in):
-    for c_idx, col in enumerate(df_in.columns, 1):
-        cell = ws.cell(1, c_idx, col)
-        cell.fill = HEADER_FILL
-        cell.font = HEADER_FONT
-        cell.alignment = CENTER
-        cell.border = BORDER
-    for r_idx, row in enumerate(df_in.itertuples(index=False), 2):
-        fill = ZEBRA1 if (r_idx - 2) % 2 == 0 else ZEBRA2
-        for c_idx, val in enumerate(row, 1):
-            cell = ws.cell(r_idx, c_idx, val)
-            cell.font = BODY_FONT
-            cell.border = BORDER
-            cell.fill = fill
-            cell.alignment = CENTER
-    # 列宽
-    for c_idx, col in enumerate(df_in.columns, 1):
-        max_len = max(len(str(col)), df_in[col].astype(str).str.len().max())
-        ws.column_dimensions[chr(64 + c_idx) if c_idx <= 26 else 'A' + chr(64 + c_idx - 26)].width = min(max_len + 3, 25)
-
-# 4.1 完整数据
-ws = wb.create_sheet('完整数据')
-write_df(ws, full)
-
-# 4.2 准确性评估
-ws = wb.create_sheet('准确性评估')
-write_df(ws, acc)
-
-# 4.3 零行程数据
-ws = wb.create_sheet('零行程数据')
-write_df(ws, zero_rows)
-
-# 4.4 每趟 sheet
-for i, (s, e) in enumerate(trips):
-    sheet_name = f'行程_{i+1}'
-    ws = wb.create_sheet(sheet_name)
-    seg = full.iloc[s:e+1].copy()
-    # 在每趟 sheet 右侧追加准确率信息行（只读展示）
-    row = rows[i]
-    summary = pd.DataFrame([
-        ['行程ID', row['行程ID']],
-        ['总行数', row['总行数']],
-        ['方向', row['方向']],
-        ['朴素积分速度准确率', row['朴素积分速度准确率']],
-        ['朴素积分速度中位误差', row['朴素积分速度中位误差']],
-        ['卡尔曼速度准确率', row['卡尔曼速度准确率']],
-        ['卡尔曼速度中位误差', row['卡尔曼速度中位误差']],
-        ['朴素积分位移准确率', row['朴素积分位移准确率']],
-        ['卡尔曼位移准确率', row['卡尔曼位移准确率']],
-    ], columns=['指标', '值'])
-    write_df(ws, seg)
-    # 追加摘要区（E2 起始列）
-    start_col = len(seg.columns) + 3
-    for r_idx, (k, v) in enumerate(summary.itertuples(index=False), 2):
-        c = ws.cell(r_idx, start_col, k)
-        c.font = Font(bold=True, name='Arial', size=10)
-        c.alignment = Alignment(horizontal='left', vertical='center')
-        c = ws.cell(r_idx, start_col + 1, v)
-        c.font = Font(name='Arial', size=10)
-        c.alignment = Alignment(horizontal='left', vertical='center')
-    ws.column_dimensions[chr(64 + start_col) if start_col <= 26 else 'A' + chr(64 + start_col - 26)].width = 22
-    ws.column_dimensions[chr(64 + start_col + 1) if start_col + 1 <= 26 else 'A' + chr(64 + start_col + 1 - 26)].width = 20
-
+# ========== 4. 写 Excel（纯数据，不加任何样式，与参考 Excel 一致） ==========
 out = '/workspace/elevator_computed_per_trip.xlsx'
-wb.save(out)
+with pd.ExcelWriter(out, engine='openpyxl') as writer:
+    full.to_excel(writer, sheet_name='完整数据', index=False)
+    acc.to_excel(writer, sheet_name='准确性评估', index=False)
+    zero_rows.to_excel(writer, sheet_name='零行程数据', index=False)
+    for i, (s, e) in enumerate(trips):
+        seg = full.iloc[s:e+1].copy()
+        seg.to_excel(writer, sheet_name=f'行程_{i+1}', index=False)
 print(f'已输出: {out}')
-print(f'  Sheet 数: {len(wb.sheetnames)}')
+print(f'  Sheet 数: {2 + len(trips) + 1}')
 print(f'  行程数: {len(trips)}')
 print(f'\n准确性评估汇总（速度容差 {SPEED_TOL} cm/s，位移容差 {DIST_TOL} cm）:')
 print(f"  朴素积分速度准确率:  中位 {np.median([float(r['朴素积分速度准确率'].rstrip('%')) for r in rows]):.1f}%")
