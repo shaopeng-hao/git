@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>电梯 187 趟准确率分段对比</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+:root{--text:#202124;--muted:#5f6368;--cap:#80868b;--bg:#fff;--mute:#f8f9fa;--brd:#e8eaed;--ax:#9aa0a6;--brand:#6366f1;--c1:#6366f1;--c2:#ec4899}
+@media (prefers-color-scheme:dark){:root{--text:#e8eaed;--muted:#bdc1c6;--cap:#9aa0a6;--bg:#1f2023;--mute:#27282b;--brd:#3c4043;--ax:#70757a;--c1:#818cf8;--c2:#f472b6}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mute);color:var(--text);font-family:system-ui,-apple-system,sans-serif;padding:24px 16px}
+.wrap{max-width:1100px;margin:0 auto}
+.card{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:16px}
+h1{font-size:20px;margin:0 0 4px}
+.sub{font-size:13px;color:var(--cap);margin-bottom:16px}
+.tabs{display:flex;gap:4px;margin-bottom:12px}
+.tab{padding:7px 16px;border-radius:8px;border:1px solid var(--brd);background:var(--mute);cursor:pointer;font-size:13px;color:var(--muted);transition:.15s}
+.tab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.leg{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:8px}
+.leg span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.cbox{position:relative;height:240px;background:var(--mute);border-radius:8px;border:1px solid var(--brd);padding:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.metric{background:var(--mute);border-radius:8px;border:1px solid var(--brd);padding:12px 14px}
+.ml{font-size:11px;color:var(--cap);margin-bottom:3px}
+.mv{font-size:18px;font-weight:600;color:var(--brand)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bh{font-size:14px;font-weight:600;margin-bottom:10px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head><body><div class="wrap">
+
+<div class="card">
+  <h1>电梯 187 趟分段准确率</h1>
+  <div class="sub">逐行对比 &nbsp;|&nbsp; 速度容差 ≤ 5 cm/s &nbsp;|&nbsp; 位移容差 ≤ 20 cm &nbsp;|&nbsp; 共 187 趟</div>
+  <div class="tabs">
+    <button class="tab active" data-c="s">速度准确率 · 折线</button>
+    <button class="tab" data-c="d">位移准确率 · 折线</button>
+    <button class="tab" data-c="h">速度准确率 · 直方图</button>
+  </div>
+  <div class="leg"><span><i class="dot" style="background:var(--c1)"></i>朴素积分</span><span><i class="dot" style="background:var(--c2)"></i>卡尔曼滤波</span></div>
+  <div class="cbox"><canvas id="mainC"></canvas></div>
+  <div class="grid" id="sumCards"></div>
+</div>
+
+<div class="card">
+  <div class="bh">两份文件来源对比（速度准确率分布）</div>
+  <div class="sub">accuracy_assessment.csv vs Excel 准确性评估 sheet</div>
+  <div class="row2">
+    <div><div class="ml">CSV 文件</div><canvas id="cA" style="height:170px;background:var(--mute);border-radius:8px;border:1px solid var(--brd);padding:4px"></canvas></div>
+    <div><div class="ml">Excel sheet</div><canvas id="cB" style="height:170px;background:var(--mute);border-radius:8px;border:1px solid var(--brd);padding:4px"></canvas></div>
+  </div>
+</div>
+
+</div>
+<script src="data.js"></script>
+<script>
+(function(){
+  let cur='s', chart=null;
+  const canvas=document.getElementById('mainC');
+  function drawLine(ids,a,b,maxY,step,label){
+    if(chart) chart.destroy();
+    chart=new Chart(canvas,{type:'line',
+      data:{labels:ids,datasets:[
+        {label:'朴素积分',data:a,borderColor:'var(--c1)',borderWidth:1.5,pointRadius:2,pointHoverRadius:5,tension:0.25,fill:false},
+        {label:'卡尔曼滤波',data:b,borderColor:'var(--c2)',borderWidth:1.5,pointRadius:2,pointHoverRadius:5,tension:0.25,fill:false}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#1f2023',cornerRadius:8,padding:10}},
+        scales:{x:{title:{display:true,text:'行程ID',color:'var(--ax)',font:{size:11}},ticks:{color:'var(--ax)',maxTicksLimit:22,font:{size:10}},grid:{color:'var(--brd)',lineWidth:0.5}},
+                 y:{min:0,max:maxY,title:{display:true,text:label,color:'var(--ax)',font:{size:11}},ticks:{color:'var(--ax)',stepSize:step,font:{size:10}},grid:{color:'var(--brd)',lineWidth:0.5}}}}
+    });
+  }
+  function drawHist(naive,kf,title){
+    const bins=[[0,60],[60,70],[70,80],[80,90],[90,100],[100,101]];
+    const labels=bins.map(x=>x[0]+'-'+x[1]+'%');
+    const n=bins.map(([a,b])=>naive.filter(v=>v>=a&&v<b).length);
+    const k=bins.map(([a,b])=>kf.filter(v=>v>=a&&v<b).length);
+    if(chart) chart.destroy();
+    chart=new Chart(canvas,{type:'bar',
+      data:{labels,datasets:[
+        {label:'朴素积分',data:n,backgroundColor:'var(--c1)'},
+        {label:'卡尔曼滤波',data:k,backgroundColor:'var(--c2)'}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:11}}},title:{display:true,text:title,font:{size:12}}},
+        scales:{x:{ticks:{color:'var(--ax)',font:{size:10}},grid:{display:false}},
+                 y:{beginAtZero:true,ticks:{color:'var(--ax)',font:{size:10}},grid:{color:'var(--brd)',lineWidth:0.5}}}
+      }
+    });
+  }
+
+  const s=D.csv.summary;
+  function render(){
+    if(cur==='s'){
+      drawLine(D.csv.tripIDs,D.csv.naiveV,D.csv.kfV,100,20,'速度准确率 (%)');
+      document.getElementById('sumCards').innerHTML=
+        `<div class="metric"><div class="ml">朴素速度 · 均值</div><div class="mv">${s.naiveV_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">KF速度 · 均值</div><div class="mv">${s.kfV_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素速度 · 中位数</div><div class="mv">${s.naiveV_med}%</div></div>`+
+        `<div class="metric"><div class="ml">KF速度 · 中位数</div><div class="mv">${s.kfV_med}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素 速度≥80%</div><div class="mv">${s.nAbove80V}%</div></div>`+
+        `<div class="metric"><div class="ml">KF 速度≥80%</div><div class="mv">${s.kAbove80V}%</div></div>`;
+    } else if(cur==='d'){
+      drawLine(D.csv.tripIDs,D.csv.naiveD,D.csv.kfD,50,10,'位移准确率 (%)');
+      document.getElementById('sumCards').innerHTML=
+        `<div class="metric"><div class="ml">朴素位移 · 均值</div><div class="mv">${s.naiveD_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">KF位移 · 均值</div><div class="mv">${s.kfD_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素位移 · 中位数</div><div class="mv">${s.naiveD_med}%</div></div>`+
+        `<div class="metric"><div class="ml">KF位移 · 中位数</div><div class="mv">${s.kfD_med}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素 位移≥20%</div><div class="mv">${s.nAbove20D}%</div></div>`+
+        `<div class="metric"><div class="ml">KF 位移≥20%</div><div class="mv">${s.kAbove20D}%</div></div>`;
+    } else {
+      drawHist(D.csv.naiveV,D.csv.kfV,'速度准确率分布 · CSV');
+      document.getElementById('sumCards').innerHTML=
+        `<div class="metric"><div class="ml">朴素速度 · 均值</div><div class="mv">${s.naiveV_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">KF速度 · 均值</div><div class="mv">${s.kfV_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素 速度≥80%</div><div class="mv">${s.nAbove80V}%</div></div>`+
+        `<div class="metric"><div class="ml">KF 速度≥80%</div><div class="mv">${s.kAbove80V}%</div></div>`+
+        `<div class="metric"><div class="ml">朴素位移 · 均值</div><div class="mv">${s.naiveD_mean}%</div></div>`+
+        `<div class="metric"><div class="ml">KF位移 · 均值</div><div class="mv">${s.kfD_mean}%</div></div>`;
+    }
+  }
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active'); cur=t.dataset.c; render();
+  }));
+
+  // 底图：两个文件的速度分布直方图
+  function buildBar(cvs,naive,kf,title){
+    const bins=[[0,60],[60,70],[70,80],[80,90],[90,100],[100,101]];
+    const labels=bins.map(x=>x[0]+'-'+x[1]+'%');
+    const n=bins.map(([a,b])=>naive.filter(v=>v>=a&&v<b).length);
+    const k=bins.map(([a,b])=>kf.filter(v=>v>=a&&v<b).length);
+    new Chart(cvs,{type:'bar',data:{labels,datasets:[
+      {label:'朴素积分',data:n,backgroundColor:'var(--c1)'},
+      {label:'卡尔曼滤波',data:k,backgroundColor:'var(--c2)'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{boxWidth:12,font:{size:10}},title:{display:true,text:title,font:{size:11}}},
+      scales:{x:{ticks:{font:{size:9}},grid:{display:false}},y:{beginAtZero:true,ticks:{font:{size:9}},grid:{color:'var(--brd)',lineWidth:0.5}}}}
+    });
+  }
+  buildBar(document.getElementById('cA'),D.csv.naiveV,D.csv.kfV,'速度准确率分布 · CSV 文件');
+  buildBar(document.getElementById('cB'),D.excel.naiveV,D.excel.kfV,'速度准确率分布 · Excel sheet');
+
+  render();
+})();
+</script>
+</body></html>
