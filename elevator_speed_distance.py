@@ -6,16 +6,18 @@
 输入（只使用这 3 列，不使用任何供应商结果）：
   travel          : 每秒 100 个加速度采样，单位 cm/s²
   utc_time        : 时间戳（输出对齐用）
-  air_pressure_pa : 气压，单位 Pa（仅用于判断运动段起止与方向）
+  air_pressure_pa : 气压，单位 Pa（判断运动段起止与方向；连续模式还用于识别楼层）
 
 输出（追加在原 CSV 上，原文件不改动）：
-  speed_integral_cm_s / distance_integral_cm : 纯积分法（欧拉）
-  speed_kf_cm_s       / distance_kf_cm       : 卡尔曼滤波 + 零速修正
+  speed_integral_cm_s / distance_integral_cm : 纯积分法（欧拉），单趟
+  speed_kf_cm_s       / distance_kf_cm       : 卡尔曼滤波 + 零速修正，单趟
+  abs_position_cm                            : 连续绝对位置（不重置，楼层锚定修正漂移）
 
 约定：
   - 速度取绝对值（全部为正），单位 cm/s，四舍五入取整
   - 位移：上行为正、下行为负，单位 cm，四舍五入取整
-  - 位移是"单趟位移"：一趟内从 0 累积到该趟总值，趟与趟之间（静止期）为 0
+  - 前四列是"单趟位移"：一趟内从 0 累积到该趟总值，趟与趟之间（静止期）为 0
+  - abs_position_cm 是跨趟连续累计的绝对位置（相对首个楼层），不归零
   - 每趟起点速度从 0 开始（v0 = 0）
 
 算法要点：
@@ -25,6 +27,8 @@
   4) 卡尔曼滤波：状态 [位移, 速度, 加速度]，加速度作为观测
   5) 零速修正 ZUPT：趟首静止行与趟末停车行各做一次 v=0 伪观测更新（Hv=[0,1,0]）
   6) 趟末以 |v| 收敛到 0 判定停车，并把速度钉到 0，抑制残余漂移
+  7) 连续模式：状态增加加速度零偏 b_a；每个静止行做 ZUPT；
+     静止块按气压聚类识别楼层，位置锚定到楼层高度 —— 这是漂移唯一能被"修正"的机制
 """
 
 import numpy as np
@@ -208,6 +212,94 @@ def fill_rows(travel, trips, a_mean, method, **kw):
     return speed, dist
 
 
+def static_blocks(static, min_len=3):
+    """把连续静止行合并成块，返回 [(start, end), ...]"""
+    blocks, i, n = [], 0, len(static)
+    while i < n:
+        if static[i]:
+            j = i
+            while j < n and static[j]:
+                j += 1
+            if j - i >= min_len:
+                blocks.append((i, j - 1))
+            i = j
+        else:
+            i += 1
+    return blocks
+
+
+def kf_continuous(travel, press, static, sigma_a=2.0, sigma_zv=3.0,
+                  sigma_floor=10.0, q_ba=0.01):
+    """
+    连续绝对位置滤波（全序列不重置，漂移靠"楼层锚定"修正）
+
+    状态 x = [位移, 速度, 加速度, 加速度零偏]
+      观测1 加速度计:  a_meas = a_true + b_a      H=[0,0,1,1]
+      观测2 零速 ZUPT: 静止行每行一次 v=0         H=[0,1,0,0]
+      观测3 楼层锚定:  静止块按气压聚类识别楼层，
+                      位置钉到该楼层高度           H=[1,0,0,0]
+                      （首次到访的楼层用当前积分位置定义其高度）
+    返回 pos, vel, b_a, floor_h, fid
+    """
+    blocks = static_blocks(static)
+    med = np.array([np.median(press[a:b + 1]) for a, b in blocks])
+    # 楼层识别：按气压从高到低排序，相邻超过 50 Pa 判为新楼层
+    order = np.argsort(-med)
+    fid = np.zeros(len(blocks), dtype=int)
+    f = 0
+    for t in range(1, len(order)):
+        if med[order[t - 1]] - med[order[t]] > 50.0:
+            f += 1
+        fid[order[t]] = f
+
+    F = np.eye(4)
+    F[0, 1], F[0, 2], F[1, 2] = DT, 0.5 * DT * DT, DT
+    Ha = np.array([[0.0, 0.0, 1.0, 1.0]])
+    Hv = np.array([[0.0, 1.0, 0.0, 0.0]])
+    Hf = np.array([[1.0, 0.0, 0.0, 0.0]])
+    Q = np.diag([(0.5 * sigma_a * DT * DT) ** 2,
+                 (sigma_a * DT) ** 2,
+                 (0.2 * sigma_a) ** 2,
+                 q_ba * DT])
+    R = np.array([[sigma_a ** 2]])
+    Rv = np.array([[sigma_zv ** 2]])
+    Rf = np.array([[sigma_floor ** 2]])
+
+    n = len(travel)
+    x = np.zeros((4, 1))
+    P = np.diag([1.0, 1.0, 4.0, 4.0])
+    I = np.eye(4)
+    pos, vel, ba = np.zeros(n), np.zeros(n), np.zeros(n)
+    floor_h, bi = {}, 0
+    for k in range(n):
+        for a in travel[k]:
+            x = F @ x
+            P = F @ P @ F.T + Q
+            y = np.array([[a]]) - Ha @ x
+            S = Ha @ P @ Ha.T + R
+            K = P @ Ha.T @ np.linalg.inv(S)
+            x = x + K @ y
+            P = (I - K @ Ha) @ P
+        if static[k]:
+            y = -Hv @ x
+            S = Hv @ P @ Hv.T + Rv
+            K = P @ Hv.T @ np.linalg.inv(S)
+            x = x + K @ y
+            P = (I - K @ Hv) @ P
+        if bi < len(blocks) and k == blocks[bi][1]:
+            fi = int(fid[bi])
+            if fi not in floor_h:
+                floor_h[fi] = float(x[0, 0])     # 首次到访：用当前估计定义该楼层高度
+            y = np.array([[floor_h[fi]]]) - Hf @ x
+            S = Hf @ P @ Hf.T + Rf
+            K = P @ Hf.T @ np.linalg.inv(S)
+            x = x + K @ y
+            P = (I - K @ Hf) @ P
+            bi += 1
+        pos[k], vel[k], ba[k] = x[0, 0], x[1, 0], x[3, 0]
+    return pos, vel, ba, blocks, fid, floor_h
+
+
 # ---------------------------------------------------------------- 校验（仅读取参考列）
 def report(df, trips, slope, v_int, d_int, v_kf, d_kf):
     if 'speed_cm_s' not in df.columns:
@@ -275,14 +367,38 @@ def main(path, out=None):
     v_int, d_int = fill_rows(travel, trips, a_mean, 'euler')
     # 卡尔曼滤波 + 零速修正
     v_kf, d_kf = fill_rows(travel, trips, a_mean, 'kf', sigma_a=2.0, q_scale=0.3, sigma_zv=3.0)
+    # 连续绝对位置（不重置；ZUPT 每行 + 楼层锚定 + 加速度零偏估计）
+    static = np.abs(slope) < SLOPE_STATIC_THR
+    pos, vel_c, ba, blocks, fid, floor_h = kf_continuous(travel, press, static)
 
     # 写回（四舍五入）
     df['speed_integral_cm_s'] = [round_half_away(x) for x in v_int]
     df['distance_integral_cm'] = [round_half_away(x) for x in d_int]
     df['speed_kf_cm_s'] = [round_half_away(x) for x in v_kf]
     df['distance_kf_cm'] = [round_half_away(x) for x in d_kf]
+    df['abs_position_cm'] = [round_half_away(x) for x in pos]
 
     report(df, trips, slope, v_int, d_int, v_kf, d_kf)
+
+    # ---- 连续绝对位置报告
+    print("\n【连续绝对位置 · 不重置滤波器】")
+    nfloor = int(fid.max()) + 1 if len(fid) else 0
+    floors = ", ".join(f"F{f + 1}={h:.0f}cm" for f, h in sorted(floor_h.items()))
+    print(f"  识别楼层数 {nfloor} | 楼层高度 {floors}")
+    stops = [(a, b) for a, b in blocks]
+    jit = np.array([pos[b] - pos[a] for a, b in stops if b - a >= 3])
+    print(f"  静止块内位置漂移: 中位 {np.median(np.abs(jit)):.1f} cm, 最大 {np.abs(jit).max():.1f} cm "
+          f"(块数 {len(stops)})")
+    # 相邻静止块的位移：检查上下行是否对称（零偏是否被修正）
+    steps = np.array([pos[stops[i + 1][1]] - pos[stops[i][1]] for i in range(len(stops) - 1)])
+    up = steps[steps > 0]
+    dn = steps[steps < 0]
+    if len(up) and len(dn):
+        print(f"  上/下行位移(相邻停靠): 上行中位 {np.median(up):.0f} cm ({len(up)} 次) | "
+              f"下行中位 {np.median(dn):.0f} cm ({len(dn)} 次)")
+        print(f"  对称性: |上行中位| - |下行中位| = {abs(np.median(up)) - abs(np.median(dn)):+.0f} cm "
+              f"(纯积分同项为 +170 cm，即未修正零偏)")
+    print(f"  估计加速度零偏 b_a: 中位 {np.median(ba):.2f} cm/s², 末段 {np.mean(ba[-200:]):.2f} cm/s²")
 
     out = out or (path.rsplit('.', 1)[0] + '_computed.csv')
     df.to_csv(out, index=False, encoding='utf-8-sig')
