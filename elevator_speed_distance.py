@@ -22,8 +22,9 @@
   1) 气压 ±3 秒线性拟合斜率判断静止/运动；环境气压漂移约 0.02 Pa/s，趟内信号约 15 Pa/s，可分
   2) 静止块之间的区间即一趟运动；起点用加速度活跃度细化
   3) 纯积分：v += a·dt，s += v·dt + ½a·dt²（dt = 0.01 s）
-  4) 卡尔曼滤波：状态 [位移, 速度, 加速度]，加速度作为观测，运动结束时以 v=0 做零速修正
-  5) 趟末以 |v| 收敛到 0 判定停车，并把速度钉到 0，抑制残余漂移
+  4) 卡尔曼滤波：状态 [位移, 速度, 加速度]，加速度作为观测
+  5) 零速修正 ZUPT：趟首静止行与趟末停车行各做一次 v=0 伪观测更新（Hv=[0,1,0]）
+  6) 趟末以 |v| 收敛到 0 判定停车，并把速度钉到 0，抑制残余漂移
 """
 
 import numpy as np
@@ -122,10 +123,12 @@ def integrate_euler(travel, s, e):
 
 
 # ---------------------------------------------------------------- 卡尔曼滤波
-def integrate_kf(travel, s, e, sigma_a=2.0, q_scale=1.0, sigma_zv=1.5):
+def integrate_kf(travel, s, e, sigma_a=2.0, q_scale=1.0, sigma_zv=1.5, zupt_rows=()):
     """
     状态 x = [位移, 速度, 加速度]^T
-    观测 z = 加速度计读数；运动结束时补充 v=0 的零速修正
+    观测 z = 加速度计读数
+    零速修正 ZUPT：在已知静止的行（趟首静止行、趟末停车行）追加一次 v=0 的伪观测，
+                  用 Hv=[0,1,0]、Rv=sigma_zv² 做测量更新
     """
     F = np.array([[1.0, DT, 0.5 * DT * DT],
                   [0.0, 1.0, DT],
@@ -138,6 +141,7 @@ def integrate_kf(travel, s, e, sigma_a=2.0, q_scale=1.0, sigma_zv=1.5):
     R = np.array([[sigma_a ** 2]])
     Rv = np.array([[sigma_zv ** 2]])
     I = np.eye(3)
+    zupt_rows = set(zupt_rows)
 
     x = np.zeros((3, 1))
     P = np.diag([1.0, 1.0, 10.0])
@@ -153,6 +157,13 @@ def integrate_kf(travel, s, e, sigma_a=2.0, q_scale=1.0, sigma_zv=1.5):
             K = P @ H.T @ np.linalg.inv(S)
             x = x + K @ y
             P = (I - K @ H) @ P
+        # 零速修正：该行结束时速度理应为 0
+        if k in zupt_rows:
+            yv = np.array([[0.0]]) - Hv @ x
+            Sv = Hv @ P @ Hv.T + Rv
+            Kv = P @ Hv.T @ np.linalg.inv(Sv)
+            x = x + Kv @ yv
+            P = (I - Kv @ Hv) @ P
         vs.append(float(x[1, 0]))
         ss.append(float(x[0, 0]))
     return np.array(vs), np.array(ss)
@@ -183,9 +194,15 @@ def fill_rows(travel, trips, a_mean, method, **kw):
     for s, e in trips:
         if method == 'euler':
             vs, ss = integrate_euler(travel, s, e)
+            end = find_end(vs, a_mean, s)
         else:
-            vs, ss = integrate_kf(travel, s, e, **kw)
-        end = find_end(vs, a_mean, s)
+            # 先用积分定位停车行，再带零速修正跑卡尔曼
+            # 积分多做 1 行，ZUPT 打在"真正停稳"的那一行；输出仍只到 end（与纯积分对齐）
+            vs0, _ = integrate_euler(travel, s, e)
+            end = find_end(vs0, a_mean, s)
+            e2 = min(e, s + end + 1)
+            vs, ss = integrate_kf(travel, s, e2, zupt_rows=(s, e2), **kw)
+            vs, ss = vs[:end + 1], ss[:end + 1]
         speed[s:s + end + 1] = np.abs(vs[:end + 1])
         dist[s:s + end + 1] = ss[:end + 1]      # 带符号：上行 + / 下行 -
     return speed, dist
@@ -257,7 +274,7 @@ def main(path, out=None):
     # 纯积分
     v_int, d_int = fill_rows(travel, trips, a_mean, 'euler')
     # 卡尔曼滤波 + 零速修正
-    v_kf, d_kf = fill_rows(travel, trips, a_mean, 'kf', sigma_a=2.0, q_scale=1.0)
+    v_kf, d_kf = fill_rows(travel, trips, a_mean, 'kf', sigma_a=2.0, q_scale=0.3, sigma_zv=3.0)
 
     # 写回（四舍五入）
     df['speed_integral_cm_s'] = [round_half_away(x) for x in v_int]
