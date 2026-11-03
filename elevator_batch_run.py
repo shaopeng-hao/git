@@ -184,14 +184,9 @@ def fill_rows(travel, trips, a_mean, method, **kw):
 # ========== 准确率计算 ==========
 def calc_trip_accuracy(trip_df):
     """
-    trip_df: 单个行程的 DataFrame，需含列:
-      naive_speed_cm_s, kalman_speed_cm_s, supplier_speed_cm_s
-      naive_displacement_cm, kalman_displacement_cm, supplier_displacement_cm
-
-    准确率规则:
+    准确率规则：
       速度: 逐行比 |计算速度 - 供应商速度| ≤ 5 cm/s
-      位移: 只在供应商位移"发生更新"的行比较（跳过平台段）| |计算位移| - |供应商位移| | ≤ 20 cm
-            + 额外报告趟末总位移误差
+      位移: 逐行比 ||计算位移| - |供应商位移|| ≤ 20 cm
     """
     n = len(trip_df)
     if n == 0:
@@ -201,8 +196,6 @@ def calc_trip_accuracy(trip_df):
             '卡尔曼速度准确率':   '0.0%', '卡尔曼速度在容差内行数': 0,
             '朴素积分位移准确率': '0.0%', '朴素积分位移在容差内行数': 0,
             '卡尔曼位移准确率':   '0.0%', '卡尔曼位移在容差内行数': 0,
-            '朴素积分位移更新点数': 0, '卡尔曼位移更新点数': 0,
-            '趟末总位移_朴素': 0, '趟末总位移_KF': 0, '趟末总位移_参考': 0,
         }
 
     ref_v = trip_df['supplier_speed_cm_s'].values.astype(float)
@@ -213,52 +206,20 @@ def calc_trip_accuracy(trip_df):
     kf_v    = trip_df['kalman_speed_cm_s'].values.astype(float)
     kf_d    = np.abs(trip_df['kalman_displacement_cm'].values.astype(float))
 
-    # 速度：逐行
-    naive_v_ok = np.abs(naive_v - ref_v) <= ACCURACY_SPEED_TOL
-    kf_v_ok    = np.abs(kf_v    - ref_v) <= ACCURACY_SPEED_TOL
+    naive_v_n = int((np.abs(naive_v - ref_v) <= ACCURACY_SPEED_TOL).sum())
+    kf_v_n    = int((np.abs(kf_v    - ref_v) <= ACCURACY_SPEED_TOL).sum())
+    naive_d_n = int((np.abs(naive_d - ref_d) <= ACCURACY_DIST_TOL).sum())
+    kf_d_n    = int((np.abs(kf_d    - ref_d) <= ACCURACY_DIST_TOL).sum())
 
-    # 位移：只在供应商位移"变化了"的行做比较（跳过平台）
-    d_changed = np.concatenate([[True], np.abs(np.diff(ref_d)) > 0.5])
-    # 也包含最后一行
-    d_changed[-1] = True
-
-    naive_d_ok = (np.abs(naive_d - ref_d) <= ACCURACY_DIST_TOL) & d_changed
-    kf_d_ok    = (np.abs(kf_d    - ref_d) <= ACCURACY_DIST_TOL) & d_changed
-    n_d_update = int(d_changed.sum())   # 供应商位移更新点数量
-
-    naive_v_n = int(naive_v_ok.sum())
-    kf_v_n    = int(kf_v_ok.sum())
-    naive_d_n = int(naive_d_ok.sum())
-    kf_d_n    = int(kf_d_ok.sum())
-
-    # 趟末总位移（绝对值）
-    last_idx = -1
-    naive_end = naive_d[last_idx]
-    kf_end    = kf_d[last_idx]
-    ref_end   = ref_d[last_idx]
-
-    def pct(a, total=n):
-        return f"{100.0 * a / total:.1f}%"
-
-    def pct_d(a):
-        return f"{100.0 * a / n_d_update:.1f}%" if n_d_update > 0 else "N/A"
+    def pct(a):
+        return f"{100.0 * a / n:.1f}%"
 
     return {
         '总行数': n,
-        '朴素积分速度准确率': pct(naive_v_n),
-        '朴素积分速度在容差内行数': naive_v_n,
-        '卡尔曼速度准确率':   pct(kf_v_n),
-        '卡尔曼速度在容差内行数':   kf_v_n,
-        '朴素积分位移准确率': pct_d(naive_d_n),
-        '朴素积分位移在容差内行数': naive_d_n,
-        '卡尔曼位移准确率':   pct_d(kf_d_n),
-        '卡尔曼位移在容差内行数':   kf_d_n,
-        '朴素积分位移更新点数': n_d_update,
-        '趟末总位移_朴素cm': round(naive_end),
-        '趟末总位移_KFcm':    round(kf_end),
-        '趟末总位移_参考cm':  round(ref_end),
-        '趟末总位移误差_朴素cm': round(abs(naive_end - ref_end)),
-        '趟末总位移误差_KFcm':   round(abs(kf_end    - ref_end)),
+        '朴素积分速度准确率': pct(naive_v_n), '朴素积分速度在容差内行数': naive_v_n,
+        '卡尔曼速度准确率':   pct(kf_v_n),    '卡尔曼速度在容差内行数':   kf_v_n,
+        '朴素积分位移准确率': pct(naive_d_n), '朴素积分位移在容差内行数': naive_d_n,
+        '卡尔曼位移准确率':   pct(kf_d_n),    '卡尔曼位移在容差内行数':   kf_d_n,
     }
 
 
@@ -367,57 +328,45 @@ def main(csv_path, out_dir=None):
 
     # --- 3c. 准确性评估 ---
     acc_df = pd.DataFrame(acc_rows)
-    # 调整列顺序
     cols = ['行程ID', '总行数',
             '朴素积分速度准确率', '朴素积分速度在容差内行数',
             '卡尔曼速度准确率',   '卡尔曼速度在容差内行数',
             '朴素积分位移准确率', '朴素积分位移在容差内行数',
-            '卡尔曼位移准确率',   '卡尔曼位移在容差内行数',
-            '朴素积分位移更新点数',
-            '趟末总位移_朴素cm', '趟末总位移_KFcm', '趟末总位移_参考cm',
-            '趟末总位移误差_朴素cm', '趟末总位移误差_KFcm']
+            '卡尔曼位移准确率',   '卡尔曼位移在容差内行数']
     acc_df = acc_df[cols]
     acc_path = os.path.join(out_dir, 'accuracy_assessment.csv')
     acc_df.to_csv(acc_path, index=False, encoding='utf-8-sig')
     print(f"  ✓ 准确率评估: {acc_path}", flush=True)
 
     # 汇总
-    print(f"\n[4/4] 准确率汇总（速度容差 ≤ {ACCURACY_SPEED_TOL} cm/s，位移容差 ≤ {ACCURACY_DIST_TOL} cm）", flush=True)
+    print(f"\n[4/4] 准确率汇总（逐行比较，速度容差 ≤ {ACCURACY_SPEED_TOL} cm/s，位移容差 ≤ {ACCURACY_DIST_TOL} cm）", flush=True)
 
-    # 4a. 速度准确率（逐行）
+    # 4a. 全序列逐行准确率
     mask = supplier_v > 5
     naive_v_acc = 100.0 * (np.abs(v_int[mask] - supplier_v[mask]) <= ACCURACY_SPEED_TOL).mean()
     kf_v_acc    = 100.0 * (np.abs(v_kf[mask]  - supplier_v[mask]) <= ACCURACY_SPEED_TOL).mean()
     print(f"  速度准确率（逐行，supplier_speed > 5 的 {mask.sum()} 行）: "
           f"朴素积分 {naive_v_acc:.1f}% | 卡尔曼 {kf_v_acc:.1f}%", flush=True)
 
-    # 4b. 趟末总位移误差（更公平的位移指标）
-    naive_end_err = np.array([a['趟末总位移误差_朴素cm'] for a in acc_rows])
-    kf_end_err    = np.array([a['趟末总位移误差_KFcm'] for a in acc_rows])
-    print(f"  趟末总位移误差（{len(acc_rows)} 趟）: "
-          f"朴素积分 中位 {np.median(naive_end_err):.0f}cm 平均 {naive_end_err.mean():.0f}cm 最大 {naive_end_err.max():.0f}cm | "
-          f"卡尔曼 中位 {np.median(kf_end_err):.0f}cm 平均 {kf_end_err.mean():.0f}cm 最大 {kf_end_err.max():.0f}cm", flush=True)
+    naive_d_acc = 100.0 * (np.abs(np.abs(d_int[mask]) - supplier_d[mask]) <= ACCURACY_DIST_TOL).mean()
+    kf_d_acc    = 100.0 * (np.abs(np.abs(d_kf[mask])  - supplier_d[mask]) <= ACCURACY_DIST_TOL).mean()
+    print(f"  位移准确率（逐行，supplier_speed > 5 的 {mask.sum()} 行）: "
+          f"朴素积分 {naive_d_acc:.1f}% | 卡尔曼 {kf_d_acc:.1f}%", flush=True)
 
-    # 趟级位移准确率（只在供应商位移更新点）
-    naive_d_trip = []; kf_d_trip = []
-    for a in acc_rows:
-        n_upd = int(a.get('朴素积分位移更新点数', 0))
-        if n_upd > 0:
-            naive_d_trip.append(int(a['朴素积分位移在容差内行数']) / n_upd)
-            kf_d_trip.append(int(a['卡尔曼位移在容差内行数'])   / n_upd)
-    if naive_d_trip:
-        print(f"  位移准确率（趟级平均，仅供应商位移更新点）: "
-              f"朴素积分 {100*np.mean(naive_d_trip):.1f}% | 卡尔曼 {100*np.mean(kf_d_trip):.1f}%", flush=True)
-
-    # 趟级速度准确率
+    # 4b. 趟级平均准确率
     naive_v_trip = []; kf_v_trip = []
+    naive_d_trip = []; kf_d_trip = []
     for a in acc_rows:
         n = int(a['总行数'])
         if n > 0:
             naive_v_trip.append(int(a['朴素积分速度在容差内行数']) / n)
             kf_v_trip.append(int(a['卡尔曼速度在容差内行数'])   / n)
-    print(f"  速度准确率（趟级平均）: "
+            naive_d_trip.append(int(a['朴素积分位移在容差内行数']) / n)
+            kf_d_trip.append(int(a['卡尔曼位移在容差内行数'])   / n)
+    print(f"  速度准确率（趟级平均，{len(acc_rows)} 趟）: "
           f"朴素积分 {100*np.mean(naive_v_trip):.1f}% | 卡尔曼 {100*np.mean(kf_v_trip):.1f}%", flush=True)
+    print(f"  位移准确率（趟级平均，{len(acc_rows)} 趟）: "
+          f"朴素积分 {100*np.mean(naive_d_trip):.1f}% | 卡尔曼 {100*np.mean(kf_d_trip):.1f}%", flush=True)
 
     print(f"\n总耗时 {time.time() - t0:.1f}s", flush=True)
     return combined_path, trips_dir, acc_path
